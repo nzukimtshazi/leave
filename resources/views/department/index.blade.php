@@ -13,11 +13,9 @@
                 <div class="col-xs-6">
                     <h4>Current Departments</h4>
                 </div>
-                {{--@if(Auth::user()->user_role == 'Management' || Auth::user()->user_role == 'Admin')--}}
                 <div class="col-xs-6 text-right">
                     <a href="department/add" role="button" class="btn btn-default">Add Department</a>
                 </div>
-                {{--@endif--}}
             </div>
         </div>
 
@@ -41,18 +39,16 @@
                             </td>
 
                             <td>
-                                {{--@if(Auth::user()->user_role == 'Management' || Auth::user()->user_role == 'Admin')--}}
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-4 col-md-2">
                                         {!! Form::model($department, ['method' => 'GET', 'route' => ['department.edit', $department->id]]) !!}
                                         <button type="submit" class="btn btn-warning"><i class="fa fa-trash"></i> Edit </button>
-                                        <a href="{!!URL::route('department.destroy', ['id' => $department->id])!!}" class="btn btn-danger">Delete</a>
+                                        <a href="{!!URL::route('department.destroy', ['id' => $department->id])!!}" class="btn btn-danger"
+                                           onclick="return confirm('Are you sure about deleting the department?')">Delete</a>
                                         {!! Form::close() !!}
                                     </div>
                                 </div>
-                                {{--@endif--}}
                             </td>
-
                         </tr>
                     @endforeach
                 </tbody>

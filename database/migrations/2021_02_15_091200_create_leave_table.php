@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLeaveCalculationTable extends Migration
+class CreateLeaveTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,17 @@ class CreateLeaveCalculationTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('leaveCalculation')) {
-            Schema::create('leaveCalculation', function (Blueprint $table) {
-                $table->bigIncrements('id');
-                $table->decimal('annualLeaveCnt', 4, 2);
-                $table->decimal('sickLeaveCnt', 4, 2);
-                $table->decimal('familyRespLeaveCnt', 4, 2);
+        if (!Schema::hasTable('leave')) {
+            Schema::create('leave', function (Blueprint $table) {
+                $table->increments('id');
+                $table->date('start_date');
+                $table->date('end_date');
+                $table->unsignedBigInteger('leaveType_id');
                 $table->unsignedBigInteger('employee_id');
                 $table->timestamps();
             });
-            Schema::table('leaveCalculation', function ($table) {
+            Schema::table('leave', function ($table) {
+                $table->foreign('leaveType_id')->references('id')->on('leaveTypes');
                 $table->foreign('employee_id')->references('id')->on('employees');
             });
         }
@@ -35,6 +36,6 @@ class CreateLeaveCalculationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('leaveCalculation');
+        Schema::dropIfExists('leave');
     }
 }

@@ -26,11 +26,11 @@
 
                             <!-- Table Headings -->
                             <thead>
-                                <th width="50%">Country</th>
+                                <th>Country</th>
                                 <th width="*">Action</th>
                             </thead>
 
-                                <!-- Table Body -->
+                            <!-- Table Body -->
                             <tbody>
                                 @foreach ($countries as $country)
                                     <tr>
@@ -43,17 +43,18 @@
                                             <div class="row">
                                                 {!! Form::model($country, ['method' => 'GET', 'route' => ['country.edit', $country->id]]) !!}
                                                 <button type="submit" class="btn btn-warning">Edit</button>
-                                                <a href="{!!URL::route('country.destroy', ['id' => $country->id])!!}" class="btn btn-danger">Delete</a>
+                                                <a href="{!!URL::route('country.destroy', ['id' => $country->id])!!}" class="btn btn-danger"
+                                                onclick="return confirm('Are you sure about deleting the country?')">Delete</a>
                                                 <a href="?country_id={{$country->id}}" role="button" class="btn btn-warning">Companies</a>
                                                 {!! Form::close() !!}
                                             </div>
                                         </td>
                                     </tr>
                                 @endforeach
-                                </tbody>
-                            @else
-                                <div class="alert alert-info" role="alert">No countries are available</div>
-                            @endif
+                            </tbody>
+                        @else
+                            <div class="alert alert-info" role="alert">No countries are available</div>
+                        @endif
                         </table>
                     </div>
                 </div>
@@ -104,7 +105,8 @@
                                             <div>
                                                 {!! Form::model($company, ['method' => 'GET', 'route' => ['company.edit', $company->id]]) !!}
                                                 <button type="submit" class="btn btn-warning"><i class="fa fa-trash"></i> Edit </button>
-                                                <a href="{!!URL::route('company.destroy', ['id' => $company->companyId])!!}" class="btn btn-danger">Delete</a>
+                                                <a href="{!!URL::route('company.destroy', ['id' => $company->id])!!}" class="btn btn-danger"
+                                                   onclick="return confirm('Are you sure about deleting the company?')">Delete</a>
                                                 <a href="{!!URL::route('company.departments', ['id' => $company->id])!!}" class="btn btn-info">Departments</a>
                                                 <a href="{!!URL::route('company.teams', ['id' => $company->id])!!}" class="btn btn-info">Teams</a>
                                                 {!! Form::close() !!}

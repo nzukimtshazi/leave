@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company\Company;
+use App\Models\Employee\Employee;
 use App\Models\Team\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
 use Session;
@@ -19,10 +21,15 @@ class TeamController extends Controller
      */
     public function index(Request $request)
     {
-        $teams = DB::table('teams')->get();
+        if(Auth::user()->user_role == 'Management') {
+            $teams = DB::table('teams')->get();
+        } else {
+            $employee = Employee::where('name', '=', Auth::user()->name)
+                ->where('surname', '=', Auth::user()->surname)->first();
+            $teams = Team::where('company_id', '=', $employee->company_id)->get();
+        }
         return view('team.index', ['teams' => $teams]);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -30,7 +37,13 @@ class TeamController extends Controller
      */
     public function add()
     {
-        $companies = Company::all('id', 'name');
+        if(Auth::user()->user_role == 'Management')
+            $companies = Company::all('id', 'name');
+        else {
+            $employee = Employee::where('name', '=', Auth::user()->name)
+                ->where('surname', '=', Auth::user()->surname)->first();
+            $companies = Company::where('id', '=', $employee->company_id)->get();
+        }
         return view('team.add', compact('companies', $companies));
     }
 
@@ -76,11 +89,16 @@ class TeamController extends Controller
     public function edit($id)
     {
         $team = Team::find($id);
-        $companies = Company::all('id','name');
         $tid = Team::find($id)->company_id;
+        if(Auth::user()->user_role == 'Management')
+            $companies = Company::all('id', 'name');
+        else {
+            $employee = Employee::where('name', '=', Auth::user()->name)
+                ->where('surname', '=', Auth::user()->surname)->first();
+            $companies = Company::where('id', '=', $employee->company_id)->get();
+        }
         return view('team.edit', compact('companies', 'team', 'tid'));
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -112,6 +130,14 @@ class TeamController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $team = Team::findOrFail($id);
+        $employees = Employee::where('team_id', '=', $team->id)->first();
+
+        if ($employees)
+            return Redirect::route('teams')->with('danger', 'Team has employees linked to it');
+        else {
+            $team->delete();
+            return Redirect::route('teams')->with('success', 'Team successfully deleted!');
+        }
     }
 }

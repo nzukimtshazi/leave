@@ -18,7 +18,7 @@ class LeaveTypeController extends Controller
      */
     public function index(Request $request)
     {
-        $leaveTypes = DB::table('leaveType')->get();
+        $leaveTypes = DB::table('leaveTypes')->get();
         return view('leaveType.index', ['leaveTypes' => $leaveTypes]);
     }
 
@@ -44,7 +44,6 @@ class LeaveTypeController extends Controller
         if ($leaveType > 0) {
             return redirect('leaveType/add')->withInput()->with('danger', 'Leave type already exists');
         }
-
         $input = Input::all();
         $leaveType = new LeaveType($input);
 

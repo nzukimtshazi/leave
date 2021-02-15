@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Company\Company;
 use App\Models\Department\Department;
+use App\Models\Employee\Employee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
 use Session;
@@ -19,7 +21,13 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
-        $departments = DB::table('departments')->get();
+        if(Auth::user()->user_role == 'Management') {
+            $departments = DB::table('departments')->get();
+        } else {
+            $employee = Employee::where('name', '=', Auth::user()->name)
+            ->where('surname', '=', Auth::user()->surname)->first();
+            $departments = Department::where('company_id', '=', $employee->company_id)->get();
+        }
         return view('department.index', ['departments' => $departments]);
     }
 
@@ -30,7 +38,13 @@ class DepartmentController extends Controller
      */
     public function add()
     {
-        $companies = Company::all('id', 'name');
+        if(Auth::user()->user_role == 'Management')
+            $companies = Company::all('id', 'name');
+        else {
+            $employee = Employee::where('name', '=', Auth::user()->name)
+                ->where('surname', '=', Auth::user()->surname)->first();
+            $companies = Company::where('id', '=', $employee->company_id)->get();
+        }
         return view('department.add', compact('companies', $companies));
     }
 
@@ -76,8 +90,14 @@ class DepartmentController extends Controller
     public function edit($id)
     {
         $department = Department::find($id);
-        $companies = Company::all('id','name');
         $did = Department::find($id)->company_id;
+        if(Auth::user()->user_role == 'Management')
+            $companies = Company::all('id', 'name');
+        else {
+            $employee = Employee::where('name', '=', Auth::user()->name)
+                ->where('surname', '=', Auth::user()->surname)->first();
+            $companies = Company::where('id', '=', $employee->company_id)->get();
+        }
         return view('department.edit', compact('companies', 'department', 'did'));
     }
 
@@ -112,6 +132,14 @@ class DepartmentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $department = Department::findOrFail($id);
+        $employees = Employee::where('dept_id', '=', $department->id)->first();
+
+        if ($employees)
+            return Redirect::route('departments')->with('danger', 'Department has employees linked to it');
+        else {
+            $department->delete();
+            return Redirect::route('departments')->with('success', 'Department successfully deleted!');
+        }
     }
 }

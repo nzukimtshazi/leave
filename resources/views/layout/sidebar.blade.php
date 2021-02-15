@@ -12,26 +12,60 @@
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav nav-pills nav-stacked">
 
-                    <span class="label label-primary col-xs-12 col-sm-12 col-md-12" style="cursor: pointer;" data-toggle="collapse" data-target="#mainMenu">Main</span>
-                    <div id="mainMenu" class="collapse in">
-                        <li><a href="{!!URL::route('dashboard.view')!!}">Dashboard</a></li>
-                        <li><a href="{!!URL::route('employees')!!}">Employees</a></li>
-                        <li><a href="{!!URL::route('attendanceRegister.add')!!}">Attendance Register</a></li>
-                        <li><a href="{!!URL::route('leave')!!}">Leave</a></li>
-                        <li><a href="{!!URL::route('reports')!!}">Reports</a></li>
-                        <div class="settings">
-                            <button class="settbtn">Settings</button>
-                            <div class="settings-content">
-                                <a href="{!! URL::route('countries') !!}">Countries</a>
-                                <a href="{!! URL::route('companies') !!}">Companies</a>
-                                <li><a href="{!!URL::route('departments')!!}">Departments</a></li>
-                                <li><a href="{!!URL::route('teams')!!}">Teams</a></li>
-                                <li><a href="{!!URL::route('employeeTypes')!!}">Employee Types</a></li>
-                                <a href="{!! URL::route('users') !!}">Users</a>
+                    @if(Auth::user()->user_role == 'Management')
+                        <span class="label label-primary col-xs-12 col-sm-12 col-md-12" style="cursor: pointer;" data-toggle="collapse" data-target="#mainMenu">Main</span>
+                        <div id="mainMenu" class="collapse in">
+                            <li><a href="{!!URL::route('dashboard.view')!!}">Dashboard</a></li>
+                            <li><a href="{!!URL::route('employees')!!}">Employees</a></li>
+                            <li><a href="{!!URL::route('attendanceRegister.add')!!}">Attendance Register</a></li>
+                            <li><a href="{!!URL::route('leave.add')!!}">Leave Applications</a></li>
+                            <li><a href="{!!URL::route('calendar.index')!!}">Calendar</a></li>
+                            <li><a href="{!!URL::route('reports')!!}">Reports</a></li>
+                            <div class="settings">
+                                <button class="settbtn">Settings</button>
+                                <div class="settings-content">
+                                    <li><a href="{!! URL::route('countries') !!}">Countries</a></li>
+                                    <li><a href="{!! URL::route('companies') !!}">Companies</a></li>
+                                    <li><a href="{!!URL::route('departments')!!}">Departments</a></li>
+                                    <li><a href="{!!URL::route('teams')!!}">Teams</a></li>
+                                    <li><a href="{!!URL::route('employeeTypes')!!}">Employee Types</a></li>
+                                    <li><a href="{!!URL::route('leaveTypes')!!}">Leave Types</a></li>
+                                    <li><a href="{!! URL::route('users') !!}">Users</a></li>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
+                        <span class="label label-primary col-xs-12 col-sm-12 col-md-12" style="cursor: pointer;" data-toggle="collapse" data-target="#helpSupport">Help & Support</span>
+                        <div id="helpSupport" class="collapse in">
+                            <li><a href="#">FAQ's</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Documentation</a></li>
+                        </div>
+                    @elseif (Auth::user()->user_role == 'Admin')
+                            <span class="label label-primary col-xs-12 col-sm-12 col-md-12" style="cursor: pointer;" data-toggle="collapse" data-target="#mainMenu">Main</span>
+                            <div id="mainMenu" class="collapse in">
+                                <li><a href="{!!URL::route('dashboard.view')!!}">Dashboard</a></li>
+                                <li><a href="{!!URL::route('employees')!!}">Employees</a></li>
+                                <li><a href="{!!URL::route('attendanceRegister.add')!!}">Attendance Register</a></li>
+                                <li><a href="{!!URL::route('leave.add')!!}">Leave Applications</a></li>
+                                <li><a href="{!!URL::route('calendar.index')!!}">Calendar</a></li>
+                                <li><a href="{!!URL::route('reports')!!}">Reports</a></li>
+                                <div class="settings">
+                                    <button class="settbtn">Settings</button>
+                                    <div class="settings-content">
+                                        <li><a href="{!!URL::route('departments')!!}">Departments</a></li>
+                                        <li><a href="{!!URL::route('teams')!!}">Teams</a></li>
+                                        <li><a href="{!!URL::route('employeeTypes')!!}">Employee Types</a></li>
+                                        <li><a href="{!!URL::route('leaveTypes')!!}">Leave Types</a></li>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="label label-primary col-xs-12 col-sm-12 col-md-12" style="cursor: pointer;" data-toggle="collapse" data-target="#helpSupport">Help & Support</span>
+                            <div id="helpSupport" class="collapse in">
+                                <li><a href="#">FAQ's</a></li>
+                                <li><a href="#">Contact</a></li>
+                                <li><a href="#">Documentation</a></li>
+                            </div>
+                        @endif
                     <div><li><a href="{!!URL::route('logout')!!}">Logout</a></li></div>
                 </ul>
             </div>

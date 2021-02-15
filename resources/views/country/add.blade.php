@@ -15,7 +15,6 @@
                     <!-- if there are creation errors, they will show here -->
                     {!! HTML::ul($errors->all()) !!}
 
-
                     {!! Form::model(new App\Models\Country\Country, ['route' => ['country.store']]) !!}
 
                     <div class="form-group">

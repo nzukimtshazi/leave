@@ -122,50 +122,79 @@
                     </div>
 
                     <div class="row">
-
-                        <div class="col-sm-3 col-md-3">
-                            <div class="form-group">
-                                {!! Form::label('country_id', 'Country Name') !!}
-                                <select class="form-control input-sm" required name="country_id" id="country_id">
-                                    <option disabled selected hidden>Select Country</option>
-                                    @foreach($countries as $country)
-                                        @if($country['id'] == app('request')->input('country_id'))
-                                            <option value="{{$country['id']}}" selected="{{$country['id']}}">{{$country['name']}}</option>
-                                        @else
-                                            <option value="{{$country->id}}">{{$country->name}}</option>
-                                        @endif
-                                    @endforeach
-                                </select>
+                        @if(Auth::user()->user_role == 'Management')
+                            <div class="col-sm-3 col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('country_id', 'Country Name') !!}
+                                    <select class="form-control input-sm" required name="country_id" id="country_id">
+                                        <option disabled selected hidden>Select Country</option>
+                                        @foreach($countries as $country)
+                                            @if($country['id'] == app('request')->input('country_id'))
+                                                <option value="{{$country['id']}}" selected="{{$country['id']}}">{{$country['name']}}</option>
+                                            @else
+                                                <option value="{{$country->id}}">{{$country->name}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="col-sm-3 col-md-3">
-                            <div class="form-group">
-                                {!! Form::label('company_id', 'Company Name') !!}
-                                <select class="form-control input-sm" required name="company_id" id="company_id">
-                                    <option value="">Select Country First</option>
-                                </select>
+                            <div class="col-sm-3 col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('company_id', 'Company Name') !!}
+                                    <select class="form-control input-sm" required name="company_id" id="company_id">
+                                        <option value="">Select Country First</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="col-sm-3 col-md-3">
-                            <div class="form-group">
-                                {!! Form::label('dept_id', 'Department Name') !!}
-                                <select class="form-control input-sm" required name="dept_id" id="dept_id">
-                                    <option value="">Select Company First</option>
-                                </select>
-                                </select>
+                            <div class="col-sm-3 col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('dept_id', 'Department Name') !!}
+                                    <select class="form-control input-sm" required name="dept_id" id="dept_id">
+                                        <option value="">Select Company First</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="col-sm-3 col-md-3">
-                            <div class="form-group">
-                                {!! Form::label('team_id', 'Team Name') !!}
-                                <select class="form-control input-sm" required name="team_id" id="team_id">
-                                    <option value="">Select Company First</option>
-                                </select>
+                            <div class="col-sm-3 col-md-3">
+                                <div class="form-group">
+                                    {!! Form::label('team_id', 'Team Name') !!}
+                                    <select class="form-control input-sm" required name="team_id" id="team_id">
+                                        <option value="">Select Company First</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    {!! Form::label('company_id', 'Company Name') !!}
+                                    <select class="form-control input-sm" required name="company_id" id="company_id">
+                                        <option disabled selected hidden>Select Company</option>
+                                        @foreach($companies as $company)
+                                            @if($company['id'] == app('request')->input('company_id'))
+                                                <option value="{{$company['id']}}" selected="{{$company['id']}}">{{$company['name']}}</option>
+                                            @else
+                                                <option value="{{$company->id}}">{{$company->name}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    {!! Form::label('dept_id', 'Department Name') !!}
+                                    <select class="form-control input-sm" required name="dept_id" id="dept_id">
+                                        <option value="">Select Company First</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    {!! Form::label('team_id', 'Team Name') !!}
+                                    <select class="form-control input-sm" required name="team_id" id="team_id">
+                                        <option value="">Select Company First</option>
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                     <a href="{!!URL::route('employees')!!}" class="btn btn-info" role="button">Cancel</a>

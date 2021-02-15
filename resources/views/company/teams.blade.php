@@ -27,14 +27,13 @@
                         @if (count($teams) > 0)
 
                             <!-- Table Headings -->
-                                <thead>
-                                <th width="25%">Team</th>
+                            <thead>
+                                 <th width="25%">Team</th>
                                 <th width="*">Action</th>
-                                </thead>
+                            </thead>
 
-
-                                <!-- Table Body -->
-                                <tbody>
+                            <!-- Table Body -->
+                            <tbody>
                                 @foreach ($teams as $team)
                                     <tr>
                                         <!-- Team Name -->
@@ -46,16 +45,17 @@
                                             <div>
                                                 {!! Form::model($team, ['method' => 'GET', 'route' => ['team.edit', $team->id]]) !!}
                                                 <button type="submit" class="btn btn-warning"><i class="fa fa-trash"></i> Edit </button>
-                                                <a href="{!!URL::route('team.destroy', ['id' => $team->id])!!}" class="btn btn-danger">Delete</a>
+                                                <a href="{!!URL::route('team.destroy', ['id' => $team->id])!!}" class="btn btn-danger"
+                                                   onclick="return confirm('Are you sure about deleting the team?')">Delete</a>
                                                 {!! Form::close() !!}
                                             </div>
                                         </td>
                                     </tr>
                                 @endforeach
-                                </tbody>
-                            @else
-                                <div class="alert alert-info" role="alert">No teams are available</div>
-                            @endif
+                            </tbody>
+                        @else
+                            <div class="alert alert-info" role="alert">No teams are available</div>
+                        @endif
                         </table>
                     </div>
                 </div>

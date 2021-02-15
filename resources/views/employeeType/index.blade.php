@@ -42,7 +42,8 @@
                                             <div class="row">
                                                 {!! Form::model($type, ['method' => 'GET', 'route' => ['employeeType.edit', $type->id]]) !!}
                                                 <button type="submit" class="btn btn-warning">Edit</button>
-                                                <a href="{!!URL::route('employeeType.destroy', ['id' => $type->id])!!}" class="btn btn-danger">Delete</a>
+                                                <a href="{!!URL::route('employeeType.destroy', ['id' => $type->id])!!}" class="btn btn-danger"
+                                                onclick="confirm('Are you sure about deleting the employee type?')">Delete</a>
                                                 {!! Form::close() !!}
                                             </div>
                                         </td>

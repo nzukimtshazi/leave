@@ -144,17 +144,14 @@ class CompanyController extends Controller
         if ($department)
             return Redirect::route('companies')->with('danger', 'Company has departments linked to it');
         else {
-            $company->delete();
-            return Redirect::route('companies')->with('success', 'Company successfully deleted!');
-        }
+            $team = Team::where('company_id', '=', $company->id)->first();
 
-        $team = Team::where('company_id', '=', $company->id)->first();
-
-        if ($team)
-            return Redirect::route('companies')->with('danger', 'Company has teams linked to it');
-        else {
-            $company->delete();
-            return Redirect::route('companies')->with('success', 'Company successfully deleted!');
+            if ($team)
+                return Redirect::route('companies')->with('danger', 'Company has teams linked to it');
+            else {
+                $company->delete();
+                return Redirect::route('companies')->with('success', 'Company successfully deleted!');
+            }
         }
     }
     /**
@@ -166,7 +163,7 @@ class CompanyController extends Controller
     public function departments($id)
     {
         $company = Company::find($id);
-        $departments= Department::where('company_id', '=', $company->id)->get();
+        $departments = Department::where('company_id', '=', $company->id)->get();
 
         return view('company.depts', compact('company', 'departments'));
     }

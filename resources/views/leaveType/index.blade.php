@@ -31,7 +31,6 @@
                                 <th width="*">Action</th>
                             </thead>
 
-
                             <!-- Table Body -->
                             <tbody>
                                 @foreach ($leaveTypes as $leaveType)

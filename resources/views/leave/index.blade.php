@@ -30,7 +30,7 @@
                             <th>Surname</th>
                             <th>Employee Type</th>
                             <th>Annual Leave</th>
-                            <th width="*">Action</th>
+                            <!--<th width="*">Action</th>-->
                         </thead>
 
                         <!-- Table Body -->
@@ -48,7 +48,13 @@
 
                                     <!-- Type of Worker -->
                                     <td class="table-text">
-                                        <div>{{ $employee->type_of_worker }}</div>
+                                        <div>
+                                            @foreach($employeeTypes as $employeeType)
+                                                @if($employee->employeeType_id == $employeeType->id)
+                                                    <div>{{ $employeeType->employee_type }}</div>
+                                                @endif
+                                            @endforeach
+                                        </div>
                                     </td>
 
                                     <!-- Accrued Leaves -->
@@ -56,19 +62,19 @@
                                         <div>
                                             @foreach($leaveCalculations as $calculation)
                                                 @if($employee->id == $calculation->employee_id)
-                                                    <div>{{ $calculation->annualLeaveCnt }}</div>
+                                                    <div>{{ $calculation->leaveDays_available }}</div>
                                                 @endif
                                             @endforeach
                                         </div>
                                     </td>
 
-                                    <td>
+                                    <!--<td>
                                         <div>
                                             {!! Form::model($employee, ['method' => 'GET', 'route' => ['employee.edit', $employee->id]]) !!}
                                             <button type="submit" class="btn btn-warning"><i class="fa fa-trash"></i></i> Edit </button>
                                             {!! Form::close() !!}
                                         </div>
-                                    </td>
+                                    </td>-->
                                 </tr>
                             @endforeach
                             </tbody>

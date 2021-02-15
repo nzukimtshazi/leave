@@ -23,7 +23,7 @@
                             {!! Form::text('name', $department->name, array('class' => 'form-control', 'required')) !!}
                         </div>
                         <div class="form-group">
-                            {!! Form::Label('department_id', 'Department Name') !!}
+                            {!! Form::Label('department_id', 'Company Name') !!}
                             <select class="form-control input-sm" name="department_id">
                                 @foreach($companies as $company)
                                     @if($company['id'] == $did)
