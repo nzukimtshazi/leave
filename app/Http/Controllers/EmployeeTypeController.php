@@ -72,8 +72,8 @@ class EmployeeTypeController extends Controller
      */
     public function edit($id)
     {
-        $employeeTypes = EmployeeType::find($id);
-        return view('employeeType.edit', ['employeeTypes' => $employeeTypes]);
+        $employeeType = EmployeeType::find($id);
+        return view('employeeType.edit', ['employeeType' => $employeeType]);
     }
 
     /**

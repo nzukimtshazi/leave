@@ -129,6 +129,9 @@ Route::get('employee/edit/{id}', ['as' => 'employee.edit','uses' => 'EmployeeCon
 // update employee
 Route::PATCH('employee/update/{id}', ['as' => 'employee.update','uses' => 'EmployeeController@update']);
 
+// terminate employee's employment
+Route::get('employee/destroy/{id}', ['as' => 'employee.destroy','uses' => 'EmployeeController@destroy']);
+
 // route to list leave types
 Route::get('leaveTypes', ['as' => 'leaveTypes','uses' => 'LeaveTypeController@index']);
 
@@ -147,8 +150,11 @@ Route::PATCH('leaveType/update/{id}', ['as' => 'leaveType.update','uses' => 'Lea
 // delete leave type
 Route::get('leaveType/destroy/{id}', ['as' => 'leaveType.destroy','uses' => 'LeaveTypeController@destroy']);
 
-// route to display leave
+// route to display leave balances
 Route::get('leave', ['as' => 'leave','uses' => 'LeaveController@index']);
+
+// store leave
+Route::post('leave/store', ['as' => 'leave.store','uses' => 'LeaveController@store']);
 
 // route to capture leave for an employee
 Route::get('leave/add', ['as' => 'leave.add','uses' => 'LeaveController@add']);
@@ -177,8 +183,12 @@ Route::post('attendanceRegister/store', ['as' => 'attendanceRegister.store','use
 // route to display employees with hours worked
 Route::get('attendanceRegister', ['as' => 'attendanceRegister','uses' => 'AttendanceRegisterController@index']);
 
-// route to display employees with hours worked
-Route::get('attendanceRegister', ['as' => 'attendanceRegister','uses' => 'AttendanceRegisterController@show']);
+// edit employee's leave summary
+Route::get('attendanceRegister/edit/{id}', ['as' => 'attendanceRegister.edit','uses' => 'AttendanceRegisterController@edit']);
+
+// update employee's attendance register
+Route::PATCH('attendanceRegister/update/{id}', ['as' => 'attendanceRegister.update','uses' => 'AttendanceRegisterController@update']);
+
 
 // route to list only shift worker employees
 Route::get('attendanceRegister/shiftWorkers', ['as' => 'attendanceRegister.shiftWorkers','uses' => 'AttendanceRegisterController@shiftWorkers']);
@@ -186,6 +196,11 @@ Route::get('attendanceRegister/shiftWorkers', ['as' => 'attendanceRegister.shift
 // route to list only labourer employees
 Route::get('attendanceRegister/labourers', ['as' => 'attendanceRegister.labourers','uses' => 'AttendanceRegisterController@labourers']);
 
+// route to paginate to the right
+Route::get('paginateRight', ['as' => 'paginateRight','uses' => 'AttendanceRegisterController@paginateRight']);
+
+// route to paginate to the left
+Route::get('paginateLeft', ['as' => 'paginateLeft','uses' => 'AttendanceRegisterController@paginateLeft']);
 
 // show the login form
 Route::get('login', ['as' => 'login','uses' => 'UserController@showLogin']);
@@ -213,3 +228,6 @@ Route::PATCH('employeeType/update/{id}', ['as' => 'employeeType.update','uses' =
 
 // delete employee type
 Route::get('employeeType/destroy/{id}', ['as' => 'employeeType.destroy','uses' => 'EmployeeTypeController@destroy']);
+
+//route to display calendar view
+Route::get('calendar/index', ['as' => 'calendar.index','uses' => 'CalendarController@index']);

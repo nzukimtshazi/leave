@@ -6,9 +6,12 @@ use App\Models\Company\Company;
 use App\Models\Country\Country;
 use App\Models\Department\Department;
 use App\Models\Employee\Employee;
+use App\Models\EmployeeHistory\EmployeeHistory;
 use App\Models\EmployeeType\EmployeeType;
 use App\Models\Team\Team;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Session;
 use Illuminate\Support\Facades\Redirect;
@@ -22,7 +25,13 @@ class EmployeeController extends Controller
      */
     public function index(Request $request)
     {
-        $employees = Employee::all();
+        if(Auth::user()->user_role == 'Management') {
+            $employees = Employee::all();
+        } else {
+            $employee = Employee::where('name', '=', Auth::user()->name)
+                ->where('surname', '=', Auth::user()->surname)->first();
+            $employees = Employee::where('company_id', '=', $employee->company_id)->get();
+        }
         $employeesArray = array();
 
         foreach ($employees as $employee)
@@ -42,11 +51,9 @@ class EmployeeController extends Controller
             $employeeType = EmployeeType::find($employee->employeeType_id);
             $employeeArray->employeeType = $employeeType->employee_type;
             array_push($employeesArray, $employeeArray);
-
         }
         return view('employee.index', ['employeesArray' => $employeesArray]);
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -54,12 +61,20 @@ class EmployeeController extends Controller
      */
     public function add()
     {
-        $countries = Country::all();
-        $companies = Company::all();
-        $departments = Department::all();
-        $teams = Team::all();
+        if(Auth::user()->user_role == 'Management') {
+            $countries = Country::all();
+            $companies = Company::all();
+            $departments = Department::all();
+            $teams = Team::all();
+        } else {
+            $employee = Employee::where('name', '=', Auth::user()->name)
+                ->where('surname', '=', Auth::user()->surname)->first();
+            $countries = Country::where('id', '=', $employee->country_id)->get();
+            $companies = Company::where('id', '=', $employee->company_id)->get();
+            $departments = Department::where('company_id', '=', $employee->company_id)->get();
+            $teams = Team::where('company_id', '=', $employee->company_id)->get();
+        }
         $employeeTypes = EmployeeType::all();
-
         return view('employee.add', compact('countries', 'companies', 'departments', 'teams', 'employeeTypes'));
     }
 
@@ -100,10 +115,19 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $employee = Employee::find($id);
-        $countries = Country::all();
-        $companies = Company::all();
-        $departments = Department::all();
-        $teams = Team::all();
+        if(Auth::user()->user_role == 'Management') {
+            $countries = Country::all();
+            $companies = Company::all();
+            $departments = Department::all();
+            $teams = Team::all();
+        } else {
+            $user = Employee::where('name', '=', Auth::user()->name)
+                ->where('surname', '=', Auth::user()->surname)->first();
+            $countries = Country::where('id', '=', $user->country_id)->get();
+            $companies = Company::where('id', '=', $user->company_id)->get();
+            $departments = Department::where('company_id', '=', $user->company_id)->get();
+            $teams = Team::where('company_id', '=', $user->company_id)->get();
+        }
         $employeeTypes = EmployeeType::all();
 
         return view('employee.edit', compact('employee', 'countries', 'companies', 'departments', 'teams', 'employeeTypes'));
@@ -150,7 +174,34 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $employee = Employee::findOrFail($id);
+
+        if ($employee) {
+            $employeeHistory = new EmployeeHistory();
+            $employeeHistory->employee_no = $employee->employee_no;
+            $employeeHistory->surname = $employee->surname;
+            $employeeHistory->name = $employee->name;
+            $employeeHistory->dob = $employee->dob;
+            $employeeHistory->idType = $employee->idType;
+            $employeeHistory->idNo = $employee->idNo;
+            $employeeHistory->gender = $employee->gender;
+            $employeeHistory->contact_no = $employee->contact_no;
+            $employeeHistory->start_date = $employee->start_date;
+            $employeeHistory->occupation = $employee->occupation;
+            $employeeHistory->email = $employee->email;
+            $date = Carbon::now();
+            $employeeHistory->termination_date = $date->format('Y-m-d');
+            $employeeHistory->employeeType_id = $employee->employeeType_id;
+            $employeeHistory->dept_id = $employee->dept_id;
+            $employeeHistory->team_id = $employee->team_id;
+            $employeeHistory->company_id = $employee->company_id;
+            $employeeHistory->country_id = $employee->country_id;
+
+            if ($employeeHistory->save()) {
+                $employee->delete();
+                return Redirect::route('employees')->with('success', 'Employee successfully terminated!');
+            }
+        }
     }
 }
 class Employees

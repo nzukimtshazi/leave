@@ -27,35 +27,34 @@
                         @if (count($departments) > 0)
 
                             <!-- Table Headings -->
-                                <thead>
+                            <thead>
                                 <th width="25%">Department</th>
                                 <th width="*">Action</th>
-                                </thead>
+                            </thead>
 
-
-                                <!-- Table Body -->
-                                <tbody>
+                            <!-- Table Body -->
+                            <tbody>
                                 @foreach ($departments as $department)
                                     <tr>
                                         <!-- Department Name -->
                                         <td class="table-text">
                                             <div>{{ $department->name }}</div>
                                         </td>
-
                                         <td>
                                             <div>
                                                 {!! Form::model($department, ['method' => 'GET', 'route' => ['department.edit', $department->id]]) !!}
                                                 <button type="submit" class="btn btn-warning"><i class="fa fa-trash"></i> Edit </button>
-                                                <a href="{!!URL::route('department.destroy', ['id' => $department->id])!!}" class="btn btn-danger">Delete</a>
+                                                <a href="{!!URL::route('department.destroy', ['id' => $department->id])!!}" class="btn btn-danger"
+                                                   onclick="return confirm('Are you sure about deleting the department?')">Delete</a>
                                                 {!! Form::close() !!}
                                             </div>
                                         </td>
                                     </tr>
                                 @endforeach
-                                </tbody>
-                            @else
-                                <div class="alert alert-info" role="alert">No departments are available</div>
-                            @endif
+                            </tbody>
+                        @else
+                            <div class="alert alert-info" role="alert">No departments are available</div>
+                        @endif
                         </table>
                     </div>
                 </div>

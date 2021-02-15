@@ -22,7 +22,7 @@
                 </div>
                 <div class="panel-body">
                     <table class="table table-striped" id="dataTable">
-                        @if (count($employees) > 0)
+                        @if (count($leaveSummaries) > 0)
 
                             <!-- Table Headings -->
                             <thead>
@@ -33,19 +33,33 @@
                                 <th>Action</th>
                             </thead>
 
-
-                            <!-- Table Body -->
+                            <!-- Table Body -->$leaveSummaries
                             <tbody>
-                                @foreach ($employees as $employee)
+                                @foreach ($leaveSummaries as $summary)
                                     <tr>
                                         <!-- Employee Name -->
                                         <td class="table-text">
-                                            <div>{{ $employee->name }}</div>
+                                            <div>{{ $summary->employeeName }}</div>
+                                        </td>
+
+                                        <!-- Annual Leave Total -->
+                                        <td class="table-text">
+                                            <div>{{ $summary->annualLeave }}</div>
+                                        </td>
+
+                                        <!-- Sick Leave Total -->
+                                        <td class="table-text">
+                                            <div>{{ $summary->sickLeave }}</div>
+                                        </td>
+
+                                        <!-- Family Responsibility Leave Total -->
+                                        <td class="table-text">
+                                            <div>{{ $summary->familyResponsibility }}</div>
                                         </td>
 
                                         <td>
                                             <div>
-                                                {!! Form::model($employee, ['method' => 'GET', 'route' => ['attendanceRegister.add', $employee->id]]) !!}
+                                                {!! Form::model($summary, ['method' => 'GET', 'route' => ['attendanceRegister.edit', $summary->id]]) !!}
                                                 <button type="submit" class="btn btn-warning"><i class="fa fa-trash"></i></i> Edit </button>
                                                 {!! Form::close() !!}
                                             </div>

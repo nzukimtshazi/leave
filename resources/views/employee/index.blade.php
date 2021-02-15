@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <table class="table table-striped" id="dataTable">
+                    <table class="display nowrap" id="dataTable">
                         @if (count($employeesArray) > 0)
 
                             <!-- Table Headings -->
@@ -88,10 +88,12 @@
                                         <td class="table-text">
                                             <div>{{ $employee->employeeType }}</div>
                                         </td>
-                                        <td>
+                                        <td class="table-text">
                                             <div>
                                                 {!! Form::model($employee, ['method' => 'GET', 'route' => ['employee.edit', $employee->id]]) !!}
                                                 <button type="submit" class="btn btn-warning"><i class="fa fa-trash"></i></i> Edit </button>
+                                                <a href="{!!URL::route('employee.destroy', ['id' => $employee->id])!!}" class="btn btn-danger"
+                                                   onclick="return confirm('Are you sure about terminating the employee?')">Terminate</a>
                                                 {!! Form::close() !!}
                                             </div>
                                         </td>
@@ -106,4 +108,11 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                "scrollX": true
+            });
+        });
+    </script>
 @endsection

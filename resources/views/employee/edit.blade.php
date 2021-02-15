@@ -122,6 +122,7 @@
                     </div>
 
                     <div class="row">
+                        @if(Auth::user()->user_role == 'Management')
                         <div class="col-sm-3 col-md-3">
                             <div class="form-group">
                                 {!! Form::Label('country_id', 'Country Name') !!}
@@ -178,6 +179,50 @@
                                 </select>
                             </div>
                         </div>
+                        @else
+                            <div class="col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    {!! Form::Label('company_id', 'Company Name') !!}
+                                    <select class="form-control input-sm" required name="company_id" id="company_id">
+                                        @foreach($companies as $company)
+                                            @if($company['id'] == $employee['company_id'])
+                                                <option value="{{$employee['company_id']}}" selected="{{$employee['company_id']}}">{{$company['name']}}</option>
+                                            @else
+                                                <option value="{{$company->id}}">{{$company->name}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    {!! Form::Label('dept_id', 'Department Name') !!}
+                                    <select class="form-control input-sm" required name="dept_id" id="dept_id">
+                                        @foreach($departments as $dept)
+                                            @if($dept['id'] == $employee['dept_id'])
+                                                <option value="{{$employee['dept_id']}}" selected="{{$employee['dept_id']}}">{{$dept['name']}}</option>
+                                            @else
+                                                <option value="{{$dept->id}}">{{$dept->name}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4">
+                                <div class="form-group">
+                                    {!! Form::Label('team_id', 'Team Name') !!}
+                                    <select class="form-control input-sm" required name="team_id" id="team_id">
+                                        @foreach($teams as $team)
+                                            @if($team['id'] == $employee['team_id'])
+                                                <option value="{{$employee['team_id']}}" selected="{{$employee['team_id']}}">{{$team['name']}}</option>
+                                            @else
+                                                <option value="{{$team->id}}">{{$team->name}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="col-xs-12 col-sm-12 col-md-12">

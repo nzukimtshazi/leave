@@ -26,15 +26,14 @@
                         @if (count($currentCompanies) > 0)
 
                             <!-- Table Headings -->
-                                <thead>
-                                    <th width="25%">Company</th>
-                                    <th width="25%">Country</th>
-                                    <th width="*">Action</th>
-                                </thead>
+                            <thead>
+                                <th width="25%">Company</th>
+                                <th width="25%">Country</th>
+                                <th width="*">Action</th>
+                            </thead>
 
-
-                                <!-- Table Body -->
-                                <tbody>
+                            <!-- Table Body -->
+                            <tbody>
                                 @foreach ($currentCompanies as $company)
                                     <tr>
                                         <!-- Company Name -->
@@ -60,10 +59,10 @@
                                         </td>
                                     </tr>
                                 @endforeach
-                                </tbody>
-                            @else
-                                <div class="alert alert-info" role="alert">No companies are available</div>
-                            @endif
+                            </tbody>
+                        @else
+                            <div class="alert alert-info" role="alert">No companies are available</div>
+                        @endif
                         </table>
                     </div>
                 </div>

@@ -15,7 +15,6 @@
                     <!-- if there are creation errors, they will show here -->
                     {!! HTML::ul($errors->all()) !!}
 
-
                     {!! Form::open(array('route' => 'department.store', 'method'=>'POST','files'=>true)) !!}
 
                     <div class="col-sm-4 col-md-4">
