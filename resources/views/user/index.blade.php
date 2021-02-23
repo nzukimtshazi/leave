@@ -60,7 +60,7 @@
 
                                     <td>
                                         <div>
-                                            {!! Form::model($user, ['method' => 'GET', 'route' => ['user.add', $user->id]]) !!}
+                                            {!! Form::model($user, ['method' => 'GET', 'route' => ['user.edit', $user->id]]) !!}
                                             <button type="submit" class="btn btn-warning"><i class="fa fa-trash"></i></i> Edit </button>
                                             {!! Form::close() !!}
                                         </div>

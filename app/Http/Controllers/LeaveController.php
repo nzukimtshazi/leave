@@ -10,6 +10,7 @@ use App\Models\LeaveCalculation\LeaveCalculation;
 use App\Models\LeaveType\LeaveType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Session;
@@ -23,11 +24,7 @@ class LeaveController extends Controller
      */
     public function index(Request $request)
     {
-        $employees = Employee::all();
-        $employeeTypes = EmployeeType::all();
-        $leaveCalculations = LeaveCalculation::all();
-
-        return view('leave.index', compact('employees', 'employeeTypes', 'leaveCalculations'));
+        //
     }
     /**
      * Show the form for creating a new resource.
@@ -48,21 +45,25 @@ class LeaveController extends Controller
      */
     public function store(Request $request)
     {
-
-        $employee = Employee::where('name', '=', $request->input('name'))
+        $employee = Employee::where('name', '=', $request->input('nameAuto'))
             ->where('surname', '=', $request->input('surname'))->first();
 
         $date1 = Carbon::createFromFormat('Y-m-d', $request->input('start_date'));
         $date2 = Carbon::createFromFormat('Y-m-d', $request->input('end_date'));
-        $days = $date1->diff($date2);
+        $interval = $date1->diffInDays($date2);
+        $days = ++$interval;
 
         $leaveType = LeaveType::where('id', '=', $request->input('leaveType_id'))->first();
-        $leaveCalculation = LeaveCalculation::where('employee_id', '=', $employee->id)
-            ->where('leaveType_id', '=', $leaveType->id)->first();
+        $leaveCalculation = LeaveCalculation::where('leaveType_id', '=', $leaveType->id)
+            ->where('employee_id', '=', $employee->id)->first();
 
         if ($leaveCalculation) {
             if ($days > $leaveCalculation->leaveDays_available)
-                return Redirect::route('leave.add')->with('warning', 'Available leave days is less than applied days!');
+                return Redirect::route('leave.add')->with('warning', 'Available leave days are less than applied days!');
+
+            $leaveCalculation->leaveDays_available = $leaveCalculation->leaveDays_available - $days;
+            $leaveCalculation->leaveDays_taken = $leaveCalculation->leaveDays_taken + $days;
+            $leaveCalculation->update();
         }
 
         $input = Input::all();
@@ -70,7 +71,7 @@ class LeaveController extends Controller
         $leave->employee_id = $employee->id;
 
         if ($leave->save())
-            return Redirect::route('leave')->with('success', 'Successfully captured leave for employee!');
+            return Redirect::route('reports.annualLeave')->with('success', 'Successfully captured leave for employee!');
         else
             return Redirect::route('leave.add')->withInput()->withErrors($leave->errors());
     }

@@ -20,18 +20,49 @@
 
     <div class="panel-body">
         <div class="row">
-            <div class="container pt-3 my-3 border col-sm-3">
-                <h3>DEPARTMENTS</h3>
-                <a href="{!!URL::route('departments') !!}">Manage Departments</a>
-            </div>
-            <div class="container pt-3 col-sm-3">
-                <h3>TEAMS</h3>
-                <a href="{!!URL::route('teams') !!}">Manage Teams</a>
-            </div>
-            <div class="containe pt-3 col-sm-3">
-                <h3>EMPLOYEES</h3>
-                <a href="{!!URL::route('employees') !!}">Manage Employees</a>
-            </div>
+            @if(Auth::user()->user_role == 'Management')
+                <div class="container pt-3 my-3 border col-sm-3">
+                    <h3>COUNTRIES</h3>
+                    <a href="{!!URL::route('countries') !!}">Manage Countries</a>
+                </div>
+                <div class="container pt-3 col-sm-3">
+                    <h3>COMPANIES</h3>
+                    <a href="{!!URL::route('companies') !!}">Manage Companies</a>
+                </div>
+                <div class="container pt-3 my-3 border col-sm-3">
+                    <h3>DEPARTMENTS</h3>
+                    <a href="{!!URL::route('departments') !!}">Manage Departments</a>
+                </div>
+                <div class="container pt-3 col-sm-3">
+                    <h3>TEAMS</h3>
+                    <a href="{!!URL::route('teams') !!}">Manage Teams</a>
+                </div>
+                <div class="containe pt-3 col-sm-3">
+                    <h3>EMPLOYEES</h3>
+                    <a href="{!!URL::route('employees') !!}">Manage Employees</a>
+                </div>
+            @else
+                <div class="container pt-3 my-3 border col-sm-3">
+                    <h3>DEPARTMENTS</h3>
+                    <a href="{!!URL::route('departments') !!}">Manage Departments</a>
+                </div>
+                <div class="container pt-3 col-sm-3">
+                    <h3>TEAMS</h3>
+                    <a href="{!!URL::route('teams') !!}">Manage Teams</a>
+                </div>
+                <div class="containe pt-3 col-sm-3">
+                    <h3>EMPLOYEES</h3>
+                    <a href="{!!URL::route('employees') !!}">Manage Employees</a>
+                </div>
+                <div class="container pt-3 col-sm-3">
+                    <h3>EMPLOYEE TYPES</h3>
+                    <a href="{!!URL::route('employeeTypes') !!}">Manage Employee Types</a>
+                </div>
+                <div class="containe pt-3 col-sm-3">
+                    <h3>LEAVE TYPES</h3>
+                    <a href="{!!URL::route('leaveTypes') !!}">Manage Leave Types</a>
+                </div>
+            @endif
         </div>
     </div>
 

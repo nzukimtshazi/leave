@@ -61,13 +61,7 @@
                             @foreach ($employeesRegisterArray as $employee)
 
                                 <tr>
-                                    @if($leftPagination == 'Yes' && $defaultValue != " ")
-                                        <td><a href="{!! URL::route('paginateLeft', ['defaultValue' => $defaultValue,
-                                        'day1' => $day1, 'day2' => $day2, 'day3' => $day3, 'day4' => $day4, 'day5' => $day5,
-                                        'day6' => $day6, 'day7' => $day7, 'str_day1' => $str_day1]) !!}">&laquo;</a></td>
-                                    @else
-                                        <td></td>
-                                    @endif
+                                    <td></td>
 
                                     <td><input type="checkbox"></td>
 
@@ -84,61 +78,59 @@
                                     <!-- Day1 -->
                                     @if($day1)
                                         <td class="table-text">
-                                            <input type="text" name="day1Register[]" value="{{ old('day1Register') }}" required id="day1" class="form-control">
+                                            <input type="text" name="day1Register[]" value="{{ @old('day1Register') }}" required id="day1" class="form-control">
                                         </td>
                                     @endif
 
                                 <!-- Day2 -->
                                     @if($day2)
                                         <td class="table-text">
-                                            <input type="text" name="day2Register[]" value="{{ old('day2Register') }}" required id="day2" class="form-control">
+                                            <input type="text" name="day2Register[]" value="{{ @old('day2Register') }}" required id="day2" class="form-control">
                                         </td>
                                     @endif
 
                                 <!-- Day3 -->
                                     @if($day3)
                                         <td class="table-text">
-                                            <input type="text" name="day3Register[]" value="{{ old('day3Register') }}" required id="day3" class="form-control">
+                                            <input type="text" name="day3Register[]" value="{{ @old('day3Register') }}" required id="day3" class="form-control">
                                         </td>
                                     @endif
 
                                 <!-- Day4 -->
                                     @if($day4)
                                         <td class="table-text">
-                                            <input type="text" name="day4Register[]" value="{{ old('day4Register') }}" required id="day4" class="form-control">
+                                            <input type="text" name="day4Register[]" value="{{ @old('day4Register') }}" required id="day4" class="form-control">
                                         </td>
                                     @endif
 
                                 <!-- Day5 -->
                                     @if($day5)
                                         <td class="table-text">
-                                            <input type="text" name="day5Register[]" value="{{ old('day5Register') }}" required id="day5" class="form-control">
+                                            <input type="text" name="day5Register[]" value="{{ @old('day5Register') }}" required id="day5" class="form-control">
                                         </td>
                                     @endif
 
                                 <!-- Day6 -->
                                     @if($day6)
                                         <td class="table-text">
-                                            <input type="text" name="day6Register[]" value="{{ old('day6Register') }}" required id="day6" class="form-control">
+                                            <input type="text" name="day6Register[]" value="{{ @old('day6Register') }}" required id="day6" class="form-control">
                                         </td>
                                     @endif
 
                                 <!-- Day7 -->
                                     @if($day7)
                                         <td class="table-text">
-                                            <input type="text" name="day7Register[]" value="{{ old('day7Register') }}" id="day7" class="form-control">
+                                            <input type="text" name="day7Register[]" value="{{ @old('day7Register') }}" required id="day7" class="form-control">
                                         </td>
                                     @endif
                                     @if($rightPagination == 'Yes' && $defaultValue != " ")
-                                        <td><a href="{!! URL::route('paginateRight', ['defaultValue' => $defaultValue, 'day1' => $day1, 'day2' => $day2,
-                                         'day3' => $day3, 'day4' => $day4, 'day5' => $day5, 'day6' => $day6, 'day7' => $day7, 'str_day1' => $str_day1]) !!}">&raquo;</a></td>
+                                        <td><input type="submit" value="&raquo;" onclick="checking()" /></td>
                                     @else
                                         <td></td>
                                     @endif
                                 </tr>
 
                                 {{ Form::hidden('employee_id[]', $employee->id) }}
-
                             @endforeach
                             {{ Form::hidden('day1', $day1) }}
                             {{ Form::hidden('day2', $day2) }}
@@ -148,6 +140,7 @@
                             {{ Form::hidden('day6', $day6) }}
                             {{ Form::hidden('day7', $day7) }}
                             {{ Form::hidden('str_day1', $str_day1) }}
+                            {{ Form::hidden('defaultValue', $defaultValue) }}
                             </tbody>
                         @else
                             <div class="alert alert-info" role="alert">No employees are available</div>
@@ -213,6 +206,10 @@
                 $('#dataTable td:nth-child(11)').children("input").val("");
             }
         });
+        function checking() {
+            var days = document.getElementById('day1').value;
+            if (days == "")
+                return confirm('You can"t paginate without capturing this page first');
+        }
     </script>
 @endsection
-

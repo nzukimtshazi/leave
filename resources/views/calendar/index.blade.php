@@ -18,7 +18,7 @@
                 @endif
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h2>Leaves Taken</h2>
+                        <h2>Leave Taken</h2>
                     </div>
                     <div class="panel-body" >
                         {!! $calendar->calendar() !!}

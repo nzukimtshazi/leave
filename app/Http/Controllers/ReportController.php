@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Employee\Employee;
+use App\Models\LeaveCalculation\LeaveCalculation;
+use App\Models\LeaveType\LeaveType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Session;
 
 class ReportController extends Controller
@@ -15,7 +19,7 @@ class ReportController extends Controller
      */
     public function index(Request $request)
     {
-        dd('Coming soon');
+        //
     }
     /**
      * Show the form for creating a new resource.
@@ -46,7 +50,7 @@ class ReportController extends Controller
      */
     public function show($id)
     {
-        //
+        //;
     }
 
     /**
@@ -82,4 +86,70 @@ class ReportController extends Controller
     {
         //
     }
+    public function annualLeave()
+    {
+        if(Auth::user()->user_role == 'Management') {
+            $employees = Employee::all();
+        } else {
+            $employee = Employee::where('name', '=', Auth::user()->name)
+                ->where('surname', '=', Auth::user()->surname)->first();
+            $employees = Employee::where('company_id', '=', $employee->company_id)->get();
+        }
+        $annualLeaveBalances = array();
+        foreach ($employees as $employee) {
+            $annualLeaveBalance = new AnnualLeaveBalance();
+            $annualLeaveBalance->id = $employee->id;
+            $annualLeaveBalance->employeeNo = $employee->employee_no;
+            $annualLeaveBalance->surname = $employee->surname;
+            $annualLeaveBalance->name = $employee->name;
+            $annualLeaveBalance->startDate = $employee->start_date;
+            $leaveType = LeaveType::where('type', 'like', '%' . 'nnua' . '%')->first();
+            $leaveCalculations = LeaveCalculation::where('leaveType_id', '=', $leaveType->id)
+                ->where('employee_id', '=', $employee->id)->first();
+            $annualLeaveBalance->accumulatedLeave = $leaveCalculations->leaveDays_available;
+            $annualLeaveBalance->daysTaken = $leaveCalculations->leaveDays_taken;
+            $annualLeaveBalance->daysRemaining = $leaveCalculations->leaveDays_available - $leaveCalculations->leaveDays_taken;
+            array_push($annualLeaveBalances, $annualLeaveBalance);
+        }
+        return view('reports.annualLeave', compact('annualLeaveBalances'));
+    }
+
+    public function sickLeave()
+    {
+        if(Auth::user()->user_role == 'Management') {
+            $employees = Employee::all();
+        } else {
+            $employee = Employee::where('name', '=', Auth::user()->name)
+                ->where('surname', '=', Auth::user()->surname)->first();
+            $employees = Employee::where('company_id', '=', $employee->company_id)->get();
+        }
+        $annualLeaveBalances = array();
+        foreach ($employees as $employee) {
+            $annualLeaveBalance = new AnnualLeaveBalance();
+            $annualLeaveBalance->id = $employee->id;
+            $annualLeaveBalance->employeeNo = $employee->employee_no;
+            $annualLeaveBalance->surname = $employee->surname;
+            $annualLeaveBalance->name = $employee->name;
+            $annualLeaveBalance->startDate = $employee->start_date;
+            $leaveType = LeaveType::where('type', 'like', '%' . 'ick' . '%')->first();
+            $leaveCalculations = LeaveCalculation::where('leaveType_id', '=', $leaveType->id)
+                ->where('employee_id', '=', $employee->id)->first();
+            $annualLeaveBalance->accumulatedLeave = $leaveCalculations->leaveDays_available;
+            $annualLeaveBalance->daysTaken = $leaveCalculations->leaveDays_taken;
+            $annualLeaveBalance->daysRemaining = $leaveCalculations->leaveDays_available - $leaveCalculations->leaveDays_taken;
+            array_push($annualLeaveBalances, $annualLeaveBalance);
+        }
+        return view('reports.sickLeave', compact('annualLeaveBalances'));
+    }
+}
+class AnnualLeaveBalance
+{
+    public $id;
+    public $employeeNo;
+    public $surname;
+    public $name;
+    public $startDate;
+    public $accumulatedLeave;
+    public $daysTaken;
+    public $daysRemaining;
 }
