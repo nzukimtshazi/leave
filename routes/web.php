@@ -150,17 +150,17 @@ Route::PATCH('leaveType/update/{id}', ['as' => 'leaveType.update','uses' => 'Lea
 // delete leave type
 Route::get('leaveType/destroy/{id}', ['as' => 'leaveType.destroy','uses' => 'LeaveTypeController@destroy']);
 
-// route to display leave balances
-Route::get('leave', ['as' => 'leave','uses' => 'LeaveController@index']);
+// route to capture leave for an employee
+Route::get('leave/add', ['as' => 'leave.add','uses' => 'LeaveController@add']);
 
 // store leave
 Route::post('leave/store', ['as' => 'leave.store','uses' => 'LeaveController@store']);
 
-// route to capture leave for an employee
-Route::get('leave/add', ['as' => 'leave.add','uses' => 'LeaveController@add']);
+// route to list annual leave balances
+Route::get('reports/annualLeave', ['as' => 'reports.annualLeave','uses' => 'ReportController@annualLeave']);
 
-// route to list reports
-Route::get('reports', ['as' => 'reports','uses' => 'ReportController@index']);
+// route to list sick leave balances
+Route::get('reports/sickLeave', ['as' => 'reports.sickLeave','uses' => 'ReportController@sickLeave']);
 
 // route to report on settings
 Route::get('settings', ['as' => 'settings','uses' => 'SettingsController@index']);
@@ -179,16 +179,6 @@ Route::get('attendanceRegister/add', ['as' => 'attendanceRegister.add','uses' =>
 
 // store storing hours worked by employees
 Route::post('attendanceRegister/store', ['as' => 'attendanceRegister.store','uses' => 'AttendanceRegisterController@store']);
-
-// route to display employees with hours worked
-Route::get('attendanceRegister', ['as' => 'attendanceRegister','uses' => 'AttendanceRegisterController@index']);
-
-// edit employee's leave summary
-Route::get('attendanceRegister/edit/{id}', ['as' => 'attendanceRegister.edit','uses' => 'AttendanceRegisterController@edit']);
-
-// update employee's attendance register
-Route::PATCH('attendanceRegister/update/{id}', ['as' => 'attendanceRegister.update','uses' => 'AttendanceRegisterController@update']);
-
 
 // route to list only shift worker employees
 Route::get('attendanceRegister/shiftWorkers', ['as' => 'attendanceRegister.shiftWorkers','uses' => 'AttendanceRegisterController@shiftWorkers']);
@@ -231,3 +221,6 @@ Route::get('employeeType/destroy/{id}', ['as' => 'employeeType.destroy','uses' =
 
 //route to display calendar view
 Route::get('calendar/index', ['as' => 'calendar.index','uses' => 'CalendarController@index']);
+
+// get the ajaxfunction for employee names
+Route::get('getNameData', ['as' => 'getNameData','uses' => 'EmployeeController@getNameData']);

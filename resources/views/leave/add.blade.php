@@ -17,15 +17,17 @@
 
                     {!! Form::open(array('route' => 'leave.store', 'method'=>'POST','files'=>true)) !!}
 
+                    {!! Form::hidden('employee_id', Request::old('employee_id'), array('class' => 'form-control', 'required', 'id'=>'employee_id')) !!}
+
                     <div class="col-sm-4 col-md-4">
                         <div class="form-group">
-                            {!! Form::label('name', 'Name') !!}
-                            {!! Form::text('name', Request::old('name'), array('class' => 'form-control', 'required')) !!}
+                            {!! Form::label('nameAuto', 'Name') !!}
+                            {!! Form::text('nameAuto', Request::old('nameAuto'), array('class' => 'form-control', 'id'=> 'nameAuto')) !!}
                         </div>
 
                         <div class="form-group">
                             {!! Form::label('surname', 'Surname') !!}
-                            {!! Form::text('surname', Request::old('surname'), array('class' => 'form-control', 'required')) !!}
+                            {!! Form::text('surname', Request::old('surname'), array('class' => 'form-control', 'id' => 'surname')) !!}
                         </div>
 
                         <div class="form-group">
@@ -59,7 +61,7 @@
                     </div>
 
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <a href="{!!URL::route('leave')!!}" class="btn btn-info" role="button">Cancel</a>
+                        <a href="{!!URL::route('reports.annualLeave')!!}" class="btn btn-info" role="button">Cancel</a>
                         {!! Form::submit('Add', array('class' => 'btn btn-primary')) !!}
                     </div>
 
@@ -68,4 +70,39 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $( function() {
+            $( "#nameAuto" ).autocomplete({
+                minLength: 2,
+                dataType: 'text',
+                source: function (request, response) {
+                    $.ajax({
+                        url: "{{URL('getNameData')}}",
+                        data: {
+                            nameAuto: jQuery("#nameAuto").val(),
+                        },
+                        error: function (data) { console.log('Error!'); },
+                        success: function (data) {
+                            response(JSON.parse(data));
+                        }
+                    });
+                },
+                focus: function( event, ui ) {
+                    $( "#nameAuto" ).val( ui.item.label );
+                    return false;
+                },
+                select: function( event, ui ) {
+                    $( "#employee_id" ).val( ui.item.id );
+                    $( "#nameAuto" ).val( ui.item.label );
+                    $( "#surname" ).val( ui.item.name );
+                    return false;
+                }
+            })
+                    .autocomplete( "instance" )._renderItem = function( ul, item ) {
+                return $( "<li>" )
+                        .append( "<div>" + item.label + " (t/a) " + item.name + "</div>" )
+                        .appendTo( ul );
+            };
+        });
+    </script>
 @endsection

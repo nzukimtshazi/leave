@@ -195,6 +195,96 @@
                                 </div>
                             </div>
                         @endif
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3">
+                                <strong><p>Please select no of working days per week:</p></strong>
+                                <input type="radio" id="five" name="days" value="five">
+                                <label for="five">Five working days</label><br>
+                                <input type="radio" id="six" name="days" value="six">
+                                <label for="six">Six working days</label><br>
+                            </div>
+                        </div><br>
+                        <div class="row">
+                            <div class="col-sm-2 col-md-2">
+                                <div class="form-group">
+                                    <strong><p>Employee Leave Types:</p></strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2 col-md-2">
+                                <div class="form-group">
+                                    <input type="checkbox" id="annual" name="annual">
+                                    <label for="annual"> Annual Leave</label><br>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2">
+                                <div class="form-group">
+                                    <input type="checkbox" id="sick" name="sick">
+                                    <label for="sick"> Sick Leave</label><br>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2">
+                                <div class="form-group">
+                                    <input type="checkbox" id="study" name="study">
+                                    <label for="study"> Study Leave</label><br>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2">
+                                <div class="form-group">
+                                    <input type="checkbox" id="maternity" name="maternity">
+                                    <label for="maternity"> Maternity Leave</label><br>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2">
+                                <div class="form-group">
+                                    <input type="checkbox" id="unpaid" name="unpaid">
+                                    <label for="unpaid"> Unpaid Leave</label><br>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2">
+                                <div class="form-group">
+                                    <input type="checkbox" id="paternity" name="paternity">
+                                    <label for="paternity"> Paternity Leave</label><br>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2">
+                                <div class="form-group">
+                                    <input type="checkbox" id="public" name="public">
+                                    <label for="public"> Public Holidays</label><br>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2">
+                                <div class="form-group">
+                                    <input type="checkbox" id="parental" name="parental">
+                                    <label for="parental"> Parental Leave</label><br>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2">
+                                <div class="form-group">
+                                    <input type="checkbox" id="family" name="family">
+                                    <label for="family"> Family Responsibility Leave</label><br>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2">
+                                <div class="form-group">
+                                    <input type="checkbox" id="commissioning" name="commissioning">
+                                    <label for="commissioning"> Commissioning Leave</label><br>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2">
+                                <div class="form-group">
+                                    <input type="checkbox" id="adoption" name="adoption">
+                                    <label for="adoption"> Adoption Leave</label><br>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2">
+                                <div class="form-group">
+                                    <input type="checkbox" id="covid" name="covid">
+                                    <label for="covid"> Covid Leave</label><br>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <a href="{!!URL::route('employees')!!}" class="btn btn-info" role="button">Cancel</a>

@@ -12,8 +12,6 @@
         {!! HTML::script(URL::to('/').'/jquery/jquery-1.12.4.js') !!}
         {!! HTML::script(URL::to('/').'/jquery/jquery-ui-1.12.1/jquery-ui.min.js') !!}
         {!! HTML::style(URL::to('/').'/jquery/jquery-ui-1.12.1/jquery-ui.min.css') !!}
-        {!! HTML::script(URL::to('/').'/jquery/timepicker/js/jquery.timepicker.min.js') !!}
-        {!! HTML::style(URL::to('/').'/jquery/timepicker/css/jquery.timepicker.min.css') !!}
 
         {!! HTML::script(URL::to('/').'/bootstrap/js/bootstrap.js') !!}
         {!! HTML::style(URL::to('/').'/bootstrap/css/bootstrap.min.css') !!}
@@ -29,24 +27,8 @@
         {!! HTML::script(URL::to('/').'/DataTables/extensions/Buttons/js/buttons.html5.js') !!}
         {!! HTML::script(URL::to('/').'/DataTables/extensions/Buttons/js/buttons.flash.js') !!}
 
-        {!! HTML::script(URL::to('/').'/fullcalendar/js/moment.js') !!}
-        {!! HTML::script(URL::to('/').'/fullcalendar/js/fullcalendar.min.js') !!}
-        {!! HTML::style(URL::to('/').'/fullcalendar/css/fullcalendar.min.css') !!}
-
-        {!! HTML::script(URL::to('/').'/ckeditor/ckeditor.js') !!}
-
-        {!! HTML::script(URL::to('/').'/owl-carousel/owl.carousel.js') !!}
-        {!! HTML::style(URL::to('/').'/owl-carousel/owl.carousel.css') !!}
-        {!! HTML::style(URL::to('/').'/owl-carousel/owl.theme.css') !!}
-
         {!! HTML::style(URL::to('/').'/bootstrap-select/css/bootstrap-select.css') !!}
         {!! HTML::script(URL::to('/').'/bootstrap-select/js/bootstrap-select.js') !!}
-
-        {!! HTML::style(URL::to('/').'/month-picker/src/MonthPicker.css') !!}
-        {!! HTML::script(URL::to('/').'/month-picker/src/MonthPicker.js') !!}
-
-        {!! HTML::style(URL::to('/').'/select2/css/select2.min.css') !!}
-        {!! HTML::script(URL::to('/').'/select2/js/select2.full.min.js') !!}
 
         <link href= {!! URL::to('/') !!} +"/fullcalendar/css/fullcalendar.print.css" rel="stylesheet" media="print">
 

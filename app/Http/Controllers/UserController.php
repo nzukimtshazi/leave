@@ -75,7 +75,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-       //
+        $user = User::find($id);
+        return view('user.edit', ['user' => $user]);
     }
 
     /**
@@ -87,7 +88,24 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-       //
+        $user = User::find($id);
+        $user->name = Input::get('name');
+        $user->surname = Input::get('surname');
+        $user->user_role = Input::get('user_role');
+        $user->email = Input::get('email');
+
+        if ((Input::get('password')) != $user->password)
+            $user->password = Hash::make(Input::get('password'));
+
+        $exists = User::where('email', $user->email)->first();
+        if ($exists  && $exists->id != $id) {
+            return Redirect::route('user.edit', [$id])->withInput()->with('danger', 'User with email "' . $user->email . '" already exists!');
+        }
+
+        if ($user->update())
+            return Redirect::route('users')->with('success', 'Successfully updated user!');
+        else
+            return Redirect::route('user.edit', [$id])->withInput()->withErrors($user->errors());
     }
 
     /**
