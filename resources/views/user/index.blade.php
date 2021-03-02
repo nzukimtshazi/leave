@@ -33,7 +33,6 @@
                             <th>Action</th>
                         </thead>
 
-
                         <!-- Table Body -->
                         <tbody>
                             @foreach ($users as $user)

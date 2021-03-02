@@ -221,10 +221,6 @@
                 info.fail(function(){
                 });
             }
-            //for datepicker
-            $(function () {
-                $('.datepicker').datepicker({dateFormat: 'yy-mm-dd'}) ;
-            });
         </script>
     </body>
 </html>

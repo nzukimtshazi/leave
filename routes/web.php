@@ -175,6 +175,9 @@ Route::get('ajax-country-company/{id}', ['as' => 'countries.ajaxCompanies','uses
 Route::get('ajax-company-team/{id}', ['as' => 'companies.ajaxTeam','uses' => 'CompanyController@ajaxTeams']);
 
 // add hours worked by employees
+Route::get('attendanceRegister/search', ['as' => 'attendanceRegister.search','uses' => 'AttendanceRegisterController@search']);
+
+// add hours worked by employees
 Route::get('attendanceRegister/add', ['as' => 'attendanceRegister.add','uses' => 'AttendanceRegisterController@add']);
 
 // store storing hours worked by employees
@@ -188,9 +191,6 @@ Route::get('attendanceRegister/labourers', ['as' => 'attendanceRegister.labourer
 
 // route to paginate to the right
 Route::get('paginateRight', ['as' => 'paginateRight','uses' => 'AttendanceRegisterController@paginateRight']);
-
-// route to paginate to the left
-Route::get('paginateLeft', ['as' => 'paginateLeft','uses' => 'AttendanceRegisterController@paginateLeft']);
 
 // show the login form
 Route::get('login', ['as' => 'login','uses' => 'UserController@showLogin']);
@@ -224,3 +224,22 @@ Route::get('calendar/index', ['as' => 'calendar.index','uses' => 'CalendarContro
 
 // get the ajaxfunction for employee names
 Route::get('getNameData', ['as' => 'getNameData','uses' => 'EmployeeController@getNameData']);
+
+// route to list employee types
+Route::get('roles', ['as' => 'roles','uses' => 'UserRoleController@index']);
+
+// add user role
+Route::get('role/add', ['as' => 'role.add','uses' => 'UserRoleController@add']);
+
+// store user role
+Route::post('role/store', ['as' => 'role.store','uses' => 'UserRoleController@store']);
+
+// edit user role
+Route::get('role/edit/{id}', ['as' => 'role.edit','uses' => 'UserRoleController@edit']);
+
+// update user role
+Route::PATCH('role/update/{id}', ['as' => 'role.update','uses' => 'UserRoleController@update']);
+
+
+
+

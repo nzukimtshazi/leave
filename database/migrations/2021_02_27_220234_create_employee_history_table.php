@@ -15,7 +15,7 @@ class CreateEmployeeHistoryTable extends Migration
     {
         if (!Schema::hasTable('employeeHistory')) {
             Schema::create('employeeHistory', function (Blueprint $table) {
-                $table->increments('id');
+                $table->bigIncrements('id');
                 $table->string('employee_no');
                 $table->string('surname');
                 $table->string('name');
@@ -26,7 +26,7 @@ class CreateEmployeeHistoryTable extends Migration
                 $table->string('contact_no');
                 $table->date('start_date');
                 $table->string('occupation');
-                $table->string('email')->unique();
+                $table->string('email');
                 $table->date('termination_date');
                 $table->string('action_user');
                 $table->unsignedBigInteger('employeeType_id');

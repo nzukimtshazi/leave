@@ -92,7 +92,7 @@
                                 <th width="*">Action</th>
                             </thead>
 
-                                <!-- Table Body -->
+                            <!-- Table Body -->
                             <tbody>
                                 @foreach ($companies as $company)
                                     <tr>

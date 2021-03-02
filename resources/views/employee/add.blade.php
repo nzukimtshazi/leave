@@ -15,7 +15,6 @@
                     <!-- if there are creation errors, they will show here -->
                     {!! HTML::ul($errors->all()) !!}
 
-
                     {!! Form::model(new App\Models\Employee\Employee, ['route' => ['employee.store']]) !!}
 
                     <div class="row">
@@ -45,16 +44,17 @@
                         <div class="col-sm-4 col-md-4">
                             <div class="form-group">
                                 {!! Form::label('dob', 'Date of birth') !!}
-                                <input type="text" name="dob" value="{{ old('dob') }}" required id="dob" class="form-control datepicker">
+                                <input type="date" name="dob" value="{{ old('dob') }}" required id="dob" class="form-control">
                             </div>
                         </div>
 
                         <div class="col-sm-4 col-md-4">
                             <div class="form-group">
                                 {!! Form::label('idType', 'ID Type') !!}
-                                {!! Form::select('idType', array('Select Type'=>'Select Type', 'RSA ID'=>'RSA ID',
+                                {!! Form::select('idType', array('Select Type' => 'Select Type', 'RSA ID'=>'RSA ID',
                                 'Passport/Foreign ID'=>'Passport/Foreign ID', 'Asylum Seeker"s Permit'=>'Asylum Seeker"s Permit',
-                                'Refugee ID'=>'Refugee ID'), null, array('class' => 'form-control')) !!}
+                                'Refugee ID'=>'Refugee ID'), null,
+                                array('class' => 'form-control')) !!}
                             </div>
                         </div>
 
@@ -70,7 +70,7 @@
                         <div class="col-sm-4 col-md-4">
                             <div class="form-group">
                                 {!! Form::label('gender', 'Gender') !!}
-                                {!! Form::select('gender', array('Select Gender'=>'Select Gender','Female'=>'Female', 'Male'=>'Male'), null, array('class' => 'form-control')) !!}
+                                {!! Form::select('gender', array('Select Gender' =>'Select Gender', 'Female'=>'Female', 'Male'=>'Male'), null, array('class' => 'form-control')) !!}
                             </div>
                         </div>
 
@@ -93,7 +93,7 @@
                         <div class="col-sm-4 col-md-4">
                             <div class="form-group">
                                 {!! Form::label('start_date', 'Start Date') !!}
-                                <input type="text" required name="start_date" value="{{ old('start_date') }}" required id="start_date" class="form-control datepicker">
+                                <input type="date" required name="start_date" value="{{ old('start_date') }}" required id="start_date" class="form-control">
                             </div>
                         </div>
 
@@ -110,11 +110,7 @@
                                 <select class="form-control input-sm" required name="employeeType_id" id="employeeType_id">
                                     <option disabled selected hidden>Select Employee Type</option>
                                     @foreach($employeeTypes as $type)
-                                        @if($type['id'] == app('request')->input('employeeType_id'))
-                                            <option value="{{$type['id']}}" selected="{{$type['id']}}">{{$type['employee_type']}}</option>
-                                        @else
-                                            <option value="{{$type->id}}">{{$type->employee_type}}</option>
-                                        @endif
+                                        <option value="{{$type->id}}">{{$type->employee_type}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -122,7 +118,7 @@
                     </div>
 
                     <div class="row">
-                        @if(Auth::user()->user_role == 'Management')
+                        @if(Auth::user()->countryCRUD == 'Y')
                             <div class="col-sm-3 col-md-3">
                                 <div class="form-group">
                                     {!! Form::label('country_id', 'Country Name') !!}
@@ -195,98 +191,91 @@
                                 </div>
                             </div>
                         @endif
-                        <div class="row">
-                            <div class="col-sm-3 col-md-3">
-                                <strong><p>Please select no of working days per week:</p></strong>
-                                <input type="radio" id="five" name="days" value="five">
-                                <label for="five">Five working days</label><br>
-                                <input type="radio" id="six" name="days" value="six">
-                                <label for="six">Six working days</label><br>
-                            </div>
-                        </div><br>
-                        <div class="row">
-                            <div class="col-sm-2 col-md-2">
-                                <div class="form-group">
-                                    <strong><p>Employee Leave Types:</p></strong>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3 col-md-3">
+                            <strong><p>Please select no of working days per week:</p></strong>
+                            <input type="radio" id="five" name="days" value="five">
+                            <label for="five">Five working days</label><br>
+                            <input type="radio" id="six" name="days" value="six">
+                            <label for="six">Six working days</label><br>
                         </div>
-                        <div class="row">
-                            <div class="col-sm-2 col-md-2">
-                                <div class="form-group">
-                                    <input type="checkbox" id="annual" name="annual">
-                                    <label for="annual"> Annual Leave</label><br>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-md-2">
-                                <div class="form-group">
-                                    <input type="checkbox" id="sick" name="sick">
-                                    <label for="sick"> Sick Leave</label><br>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-md-2">
-                                <div class="form-group">
-                                    <input type="checkbox" id="study" name="study">
-                                    <label for="study"> Study Leave</label><br>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-md-2">
-                                <div class="form-group">
-                                    <input type="checkbox" id="maternity" name="maternity">
-                                    <label for="maternity"> Maternity Leave</label><br>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-md-2">
-                                <div class="form-group">
-                                    <input type="checkbox" id="unpaid" name="unpaid">
-                                    <label for="unpaid"> Unpaid Leave</label><br>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-md-2">
-                                <div class="form-group">
-                                    <input type="checkbox" id="paternity" name="paternity">
-                                    <label for="paternity"> Paternity Leave</label><br>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-md-2">
-                                <div class="form-group">
-                                    <input type="checkbox" id="public" name="public">
-                                    <label for="public"> Public Holidays</label><br>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-md-2">
-                                <div class="form-group">
-                                    <input type="checkbox" id="parental" name="parental">
-                                    <label for="parental"> Parental Leave</label><br>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-md-2">
-                                <div class="form-group">
-                                    <input type="checkbox" id="family" name="family">
-                                    <label for="family"> Family Responsibility Leave</label><br>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-md-2">
-                                <div class="form-group">
-                                    <input type="checkbox" id="commissioning" name="commissioning">
-                                    <label for="commissioning"> Commissioning Leave</label><br>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-md-2">
-                                <div class="form-group">
-                                    <input type="checkbox" id="adoption" name="adoption">
-                                    <label for="adoption"> Adoption Leave</label><br>
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-md-2">
-                                <div class="form-group">
-                                    <input type="checkbox" id="covid" name="covid">
-                                    <label for="covid"> Covid Leave</label><br>
-                                </div>
+                    </div><br>
+                    <div class="row">
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <strong><p>Employee Leave Types: <input type="checkbox" id="selectAll"></p></strong>
                             </div>
                         </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <input type="checkbox" id="annual" name="annual">
+                                <label for="annual"> Annual Leave</label><br>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <input type="checkbox" id="sick" name="sick">
+                                <label for="sick"> Sick Leave</label><br>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <input type="checkbox" id="study" name="study">
+                                <label for="study"> Study Leave</label><br>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <input type="checkbox" id="maternity" name="maternity">
+                                <label for="maternity"> Maternity Leave</label><br>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <input type="checkbox" id="unpaid" name="unpaid">
+                                <label for="unpaid"> Unpaid Leave</label><br>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <input type="checkbox" id="paternity" name="paternity">
+                                <label for="paternity"> Paternity Leave</label><br>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <input type="checkbox" id="public" name="public">
+                                <label for="public"> Public Holidays</label><br>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3">
+                            <div class="form-group">
+                                <input type="checkbox" id="family" name="family">
+                                <label for="family"> Family Responsibility Leave</label><br>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <input type="checkbox" id="commissioning" name="commissioning">
+                                <label for="commissioning"> Commissioning Leave</label><br>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <input type="checkbox" id="adoption" name="adoption">
+                                <label for="adoption"> Adoption Leave</label><br>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <input type="checkbox" id="covid" name="covid">
+                                <label for="covid"> Covid Leave</label><br>
+                            </div>
+                        </div>
+                    </div>
                     <a href="{!!URL::route('employees')!!}" class="btn btn-info" role="button">Cancel</a>
                     {!! Form::submit('Add', array('class' => 'btn btn-primary')) !!}
                     {!! Form::close() !!}
@@ -294,4 +283,9 @@
             </div>
         </div>
     </div>
+    <script>
+        $('#selectAll').click(function() {
+            $(this.form.elements).filter(':checkbox').prop('checked', this.checked)
+        });
+    </script>
 @endsection

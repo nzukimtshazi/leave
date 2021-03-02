@@ -13,10 +13,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
+        //Model::unguard();
 
-        $this->call(hoursWorkedSeeder::class);
+        $this->call(RoleTableDataSeeder::class);
 
-        Model::reguard();
+        //Model::reguard();
     }
 }

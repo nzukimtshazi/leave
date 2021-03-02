@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCompaniesTable extends Migration
+class CreateFunctionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateCompaniesTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('companies')) {
-            Schema::create('companies', function (Blueprint $table) {
+        if (!Schema::hasTable('functions')) {
+            Schema::create('functions', function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->string('name');
-                $table->unsignedBigInteger('country_id');
+                $table->string('description');
+                $table->unsignedBigInteger('role_id');
                 $table->timestamps();
             });
-            Schema::table('companies', function ($table) {
-                $table->foreign('country_id')->references('id')->on('countries');
+            Schema::table('functions', function ($table) {
+                $table->foreign('role_id')->references('id')->on('roles');
             });
         }
     }
@@ -33,7 +33,6 @@ class CreateCompaniesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('companies');
+        Schema::dropIfExists('functions');
     }
 }
-

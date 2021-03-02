@@ -36,7 +36,7 @@
                                 <th>Email Address</th>
                                 <th>Start Date</th>
                                 <th>Occupation</th>
-                                <th>Type Of Worker</th>
+                                <th>Employee Type</th>
                                 <th width="*">Action</th>
                             </thead>
 

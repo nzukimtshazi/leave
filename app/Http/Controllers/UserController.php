@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Functions\Functions;
+use App\Models\Role\Role;
 use App\Models\User\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,6 +15,13 @@ use Illuminate\Support\Facades\Input;
 
 class UserController extends Controller
 {
+    /**
+     * Define your validation rules in a property in
+     * the controller to reuse the rules.
+     */
+    protected $validationRules=[
+        'role_id' => 'required|numeric|digits_between:1,9999',
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -30,7 +39,8 @@ class UserController extends Controller
      */
     public function add()
     {
-        return view('user.create');
+        $roles = Role::all();
+        return view('user.create', compact('roles'));
     }
 
     /**
@@ -41,6 +51,10 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $v = Validator::make($request->all(), $this->validationRules);
+        if ($v->fails())
+            return redirect()->back()->withErrors($v->errors())->withInput();
+
         $input = Input::all();
         $user = new User($input);
         $user->password = Hash::make(Input::get('password'));
@@ -49,11 +63,81 @@ class UserController extends Controller
         if ($exists) {
             return Redirect::route('user.create')->withInput()->with('danger', 'User with email "' . $user->email . '" already exists!');
         }
+        if (Input::get('country') == null && Input::get('company') == null && Input::get('department') == null &&
+            Input::get('team') == null && Input::get('employeeType') == null && Input::get('leaveType') == null &&
+            Input::get('employee') == null && Input::get('attReg') == null && Input::get('leave') == null &&
+            Input::get('reports') == null && Input::get('user_role') == null && Input::get('crud_user') == null)
+            return Redirect::route('user.add')->withInput()->with('warning', 'At least one user function must be selected!');
 
-        if ($user->save())
+        $role = Role::find(Input::get('role_id'));
+        if (Input::get('country') == 'on') {
+            $user->countryCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD Country');
+        }
+        if (Input::get('company') == 'on') {
+            $user->companyCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD Company');
+        }
+        if (Input::get('department') == 'on') {
+            $user->departmentCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD Department');
+        }
+        if (Input::get('team') == 'on') {
+            $user->teamCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD Team');
+        }
+        if (Input::get('employeeType') == 'on') {
+            $user->employeeTypeCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD Employee Type');
+        }
+        if (Input::get('leaveType') == 'on') {
+            $user->leaveTypeCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD Leave Type');
+        }
+        if (Input::get('employee') == 'on') {
+            $user->employeeCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD Employee');
+        }
+        if (Input::get('attReg') == 'on') {
+            $user->attReg = 'Y';
+            $this->addFunctions($role->id, 'Add Attendance Register');
+        }
+        if (Input::get('leave') == 'on') {
+            $user->leaveCRUD = 'Y';
+            $this->addFunctions($role->id, 'Capture Leave');
+        }
+        if (Input::get('settings') == 'on') {
+            $user->settings = 'Y';
+            $this->addFunctions($role->id, 'Settings');
+        }
+        if (Input::get('reports') == 'on') {
+            $user->reportView = 'Y';
+            $this->addFunctions($role->id, 'View Reports');
+        }
+        if (Input::get('user_role') == 'on') {
+            $user->roleCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD User role');
+        }
+        if (Input::get('crud_user') == 'on') {
+            $user->userCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD User');
+        }
+        if ($user->save()) {
             return Redirect::route('users')->with('success', 'Successfully added user!');
-        else
+        } else
             return Redirect::route('user.create')->withInput()->withErrors($user->errors());
+    }
+    public function addFunctions($role_id, $description)
+    {
+        $functions = Functions::where('description', '=', $description)
+            ->where('role_id', '=', $role_id)->first();
+
+        if (!$functions) {
+            $functions = new Functions();
+            $functions->description = $description;
+            $functions->role_id = $role_id;
+            $functions->save();
+        }
     }
 
     /**
@@ -76,7 +160,63 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        return view('user.edit', ['user' => $user]);
+        $roles = Role::all();
+
+        if ($user->countryCRUD == 'Y')
+            $country = 'on';
+        else
+            $country = null;
+        if ($user->companyCRUD == 'Y')
+            $company = 'on';
+        else
+            $company = null;
+        if ($user->departmentCRUD == 'Y')
+            $department = 'on';
+        else
+            $department = null;
+        if ($user->teamCRUD == 'Y')
+            $team = 'on';
+        else
+            $team = null;
+        if ($user->employeeTypeCRUD == 'Y')
+            $employeeType = 'on';
+        else
+            $employeeType = null;
+        if ($user->leaveTypeCRUD == 'Y')
+            $leaveType = 'on';
+        else
+            $leaveType = null;
+        if ($user->employeeCRUD == 'Y')
+            $employee = 'on';
+        else
+            $employee = null;
+        if ($user->attReg == 'Y')
+            $attReg = 'on';
+        else
+            $attReg = null;
+        if ($user->leaveCRUD == 'Y')
+            $leave = 'on';
+        else
+            $leave = null;
+        if ($user->settings = 'Y')
+            $settings = 'on';
+        else
+            $settings = null;
+        if ($user->reportView == 'Y')
+            $reports = 'on';
+        else
+            $reports = null;
+        if ($user->roleCRUD == 'Y')
+            $user_role = 'on';
+        else
+            $user_role = null;
+        if ($user->userCRUD == 'Y')
+            $crud_user = 'on';
+        else
+            $crud_user = null;
+
+        return view('user.edit', compact('user', 'roles', 'country', 'company', 'department', 'team', 'employeeType',
+            'leaveType', 'employee', 'attReg', 'leave', 'settings', 'reports', 'user_role', 'crud_user'));
     }
 
     /**
@@ -88,11 +228,21 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $v = Validator::make($request->all(), $this->validationRules);
+        if ($v->fails())
+            return redirect()->back()->withErrors($v->errors())->withInput();
+
+        if (Input::get('country') == null && Input::get('company') == null && Input::get('department') == null &&
+            Input::get('team') == null && Input::get('employeeType') == null && Input::get('leaveType') == null &&
+            Input::get('employee') == null && Input::get('attReg') == null && Input::get('leave') == null &&
+            Input::get('reports') == null && Input::get('user_role') == null && Input::get('crud_user') == null)
+            return Redirect::route('user.edit', [$id])->withInput()->with('warning', 'At least one user function must be selected!');
+
         $user = User::find($id);
         $user->name = Input::get('name');
         $user->surname = Input::get('surname');
-        $user->user_role = Input::get('user_role');
         $user->email = Input::get('email');
+        $user->role_id = Input::get('role_id');
 
         if ((Input::get('password')) != $user->password)
             $user->password = Hash::make(Input::get('password'));
@@ -101,6 +251,84 @@ class UserController extends Controller
         if ($exists  && $exists->id != $id) {
             return Redirect::route('user.edit', [$id])->withInput()->with('danger', 'User with email "' . $user->email . '" already exists!');
         }
+        $role = Role::find(Input::get('role_id'));
+        if (Input::get('country') == 'on') {
+            $user->countryCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD Country');
+        } else
+            $user->countryCRUD = 'N';
+
+        if (Input::get('company') == 'on') {
+            $user->companyCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD Company');
+        } else
+            $user->companyCRUD = 'N';
+
+        if (Input::get('department') == 'on') {
+            $user->departmentCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD Department');
+        } else
+            $user->departmentCRUD = 'N';
+
+        if (Input::get('team') == 'on') {
+            $user->teamCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD Team');
+        } else
+            $user->teamCRUD = 'N';
+
+        if (Input::get('employeeType') == 'on') {
+            $user->employeeTypeCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD Employee Type');
+        } else
+            $user->employeeTypeCRUD = 'N';
+
+        if (Input::get('leaveType') == 'on') {
+            $user->leaveTypeCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD Leave Type');
+        } else
+            $user->leaveTypeCRUD = 'N';
+
+        if (Input::get('employee') == 'on') {
+            $user->employeeCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD Employee');
+        } else
+            $user->employeeCRUD = 'N';
+
+        if (Input::get('attReg') == 'on') {
+            $user->attReg = 'Y';
+            $this->addFunctions($role->id, 'Add Attendance Register');
+        } else
+            $user->attReg = 'N';
+
+        if (Input::get('leave') == 'on') {
+            $user->leaveCRUD = 'Y';
+            $this->addFunctions($role->id, 'Capture Leave');
+        } else
+            $user->leaveCRUD = 'N';
+
+        if (Input::get('settings') == 'on') {
+            $user->settings = 'Y';
+            $this->addFunctions($role->id, 'Settings');
+        } else
+            $user->settings = 'N';
+
+        if (Input::get('reports') == 'on') {
+            $user->reportView = 'Y';
+            $this->addFunctions($role->id, 'View Reports');
+        } else
+            $user->reportView = 'N';
+
+        if (Input::get('user_role') == 'on') {
+            $user->roleCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD User role');
+        } else
+            $user->roleCRUD = 'N';
+
+        if (Input::get('crud_user') == 'on') {
+            $user->userCRUD = 'Y';
+            $this->addFunctions($role->id, 'CRUD User');
+        } else
+            $user->userCRUD = 'N';
 
         if ($user->update())
             return Redirect::route('users')->with('success', 'Successfully updated user!');

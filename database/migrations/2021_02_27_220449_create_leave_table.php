@@ -15,9 +15,10 @@ class CreateLeaveTable extends Migration
     {
         if (!Schema::hasTable('leave')) {
             Schema::create('leave', function (Blueprint $table) {
-                $table->increments('id');
+                $table-> bigIncrements('id');
                 $table->date('start_date');
                 $table->date('end_date');
+                $table->enum('approved', ['Y', 'N'])->default('N');
                 $table->unsignedBigInteger('leaveType_id');
                 $table->unsignedBigInteger('employee_id');
                 $table->timestamps();

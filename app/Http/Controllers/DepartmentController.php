@@ -9,11 +9,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 
 class DepartmentController extends Controller
 {
+    /**
+     * Define your validation rules in a property in
+     * the controller to reuse the rules.
+     */
+    protected $validationRules=[
+        'company_id' => 'required|numeric|digits_between:1,9999',
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -21,13 +29,12 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
-        if(Auth::user()->user_role == 'Management') {
-            $departments = DB::table('departments')->get();
-        } else {
-            $employee = Employee::where('name', '=', Auth::user()->name)
+        $employee = Employee::where('name', '=', Auth::user()->name)
             ->where('surname', '=', Auth::user()->surname)->first();
+        if ($employee)
             $departments = Department::where('company_id', '=', $employee->company_id)->get();
-        }
+        else
+            $departments = DB::table('departments')->get();
         return view('department.index', ['departments' => $departments]);
     }
 
@@ -38,13 +45,12 @@ class DepartmentController extends Controller
      */
     public function add()
     {
-        if(Auth::user()->user_role == 'Management')
-            $companies = Company::all('id', 'name');
-        else {
-            $employee = Employee::where('name', '=', Auth::user()->name)
-                ->where('surname', '=', Auth::user()->surname)->first();
+        $employee = Employee::where('name', '=', Auth::user()->name)
+            ->where('surname', '=', Auth::user()->surname)->first();
+        if ($employee)
             $companies = Company::where('id', '=', $employee->company_id)->get();
-        }
+        else
+            $companies = Company::all();
         return view('department.add', compact('companies', $companies));
     }
 
@@ -56,6 +62,10 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
+        $v = Validator::make($request->all(), $this->validationRules);
+        if ($v->fails())
+            return redirect()->back()->withErrors($v->errors())->withInput();
+
         $department = Department::where('name', '=', $request->name)->count();
         if ($department > 0)
             return redirect('department/add')->withInput()->with('danger', 'Department already exists');
@@ -63,6 +73,7 @@ class DepartmentController extends Controller
         $company = Company::where('id', '=', Input::get('company_id'))->first();
         $input = Input::all();
         $department = new Department($input);
+        $department->company_id = $company->id;
 
         if ($department->save())
             return Redirect::route('departments', ['company_id' => $company->id])->with('success', 'Successfully added department!');
@@ -91,14 +102,8 @@ class DepartmentController extends Controller
     {
         $department = Department::find($id);
         $did = Department::find($id)->company_id;
-        if(Auth::user()->user_role == 'Management')
-            $companies = Company::all('id', 'name');
-        else {
-            $employee = Employee::where('name', '=', Auth::user()->name)
-                ->where('surname', '=', Auth::user()->surname)->first();
-            $companies = Company::where('id', '=', $employee->company_id)->get();
-        }
-        return view('department.edit', compact('companies', 'department', 'did'));
+        $company = Company::find($department->company_id);
+        return view('department.edit', compact('department', 'did', 'company'));
     }
 
     /**
@@ -110,6 +115,10 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $v = Validator::make($request->all(), $this->validationRules);
+        if ($v->fails())
+            return redirect()->back()->withErrors($v->errors())->withInput();
+
         $department = Department::find($id);
         $department_check = Department::where('name', '=', Input::get('name'))->get()->first();
 
@@ -117,6 +126,7 @@ class DepartmentController extends Controller
             return Redirect::route('department.edit', [$id])->withInput()->with('danger', 'Department already exists');
 
         $department->name = Input::get('name');
+        $department->company_id = Input::get('company_id');
 
         if ($department->update())
             return Redirect::route('departments')->with('success', 'Successfully updated department!');

@@ -2,20 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department\Department;
 use App\Models\Employee\Employee;
 use App\Models\AttendanceRegister\AttendanceRegister;
 use App\Models\EmployeeType\EmployeeType;
 use App\Models\LeaveCalculation\LeaveCalculation;
 use App\Models\LeaveType\LeaveType;
+use App\Models\Role\Role;
+use App\Models\Team\Team;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Session;
 
 class AttendanceRegisterController extends Controller
 {
+    /**
+     * Define your validation rules in a property in
+     * the controller to reuse the rules.
+     */
+    protected $validationRules=[
+        'employeeType_id' => 'required|numeric|digits_between:1,9999',
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -26,21 +38,29 @@ class AttendanceRegisterController extends Controller
         //
     }
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new resources.
      *
      * @return \Illuminate\Http\Response
      */
-    public function add()
+    public function search(Request $request)
     {
-        if(Auth::user()->user_role == 'Management') {
-            $employees = Employee::all();
+        $employee = Employee::where('name', '=', Auth::user()->name)
+            ->where('surname', '=', Auth::user()->surname)->first();
+        if ($employee) {
+            $departments = Department::where('company_id', '=', $employee->company_id)->get();
+            $teams = Team::where('company_id', '=', $employee->company_id)->get();
         } else {
-            $employee = Employee::where('name', '=', Auth::user()->name)
-                ->where('surname', '=', Auth::user()->surname)->first();
-            $employees = Employee::where('company_id', '=', $employee->company_id)->get();
+            $departments = DB::table('departments')->get();
+            $teams = DB::table('teams')->get();
         }
-        $defaultValue = " ";
-        return $this->editEmployees($employees, $defaultValue);
+        $employeeTypes = EmployeeType::all();
+        return view('attendanceRegister.search', compact('departments', 'teams', 'employeeTypes'));
+    }
+    public function add(Request $request)
+    {
+        $v = Validator::make($request->all(), $this->validationRules);
+        if ($v->fails())
+            return redirect()->back()->withErrors($v->errors())->withInput();
     }
     /**
      * Store a newly created resource in storage.
@@ -280,14 +300,13 @@ class AttendanceRegisterController extends Controller
      */
     public function shiftWorkers(Request $request)
     {
-        if(Auth::user()->user_role == 'Management') {
-            $employees = Employee::where('employeeType_id', '=', 1)->get();
-        } else {
-            $employee = Employee::where('name', '=', Auth::user()->name)
-                ->where('surname', '=', Auth::user()->surname)->first();
+        $employee = Employee::where('name', '=', Auth::user()->name)
+            ->where('surname', '=', Auth::user()->surname)->first();
+        if ($employee)
             $employees = Employee::where('company_id', '=', $employee->company_id)
-                ->where('employeeType_id', '=', 1)->get();
-        }
+                ->where('employeeType_id', '=', $employee->employeeType_id)->get();
+        else
+            $employees = Employee::where('employeeType_id', '=', 1)->get();
 
         $defaultValue = "P";
         return $this->editEmployees($employees, $defaultValue);
@@ -299,14 +318,14 @@ class AttendanceRegisterController extends Controller
      */
     public function labourers(Request $request)
     {
-        if(Auth::user()->user_role == 'Management') {
-            $employees = Employee::where('employeeType_id', '!=', 1)->get();
-        } else {
-            $employee = Employee::where('name', '=', Auth::user()->name)
-                ->where('surname', '=', Auth::user()->surname)->first();
+        $employee = Employee::where('name', '=', Auth::user()->name)
+            ->where('surname', '=', Auth::user()->surname)->first();
+        if ($employee)
             $employees = Employee::where('company_id', '=', $employee->company_id)
-                ->where('employeeType_id', '!=', 1)->get();
-        }
+                ->where('employeeType_id', '=', $employee->employeeType_id)->get();
+        else
+            $employees = Employee::where('employeeType_id', '=', 1)->get();
+
         $defaultValue = "8";
         return $this->editEmployees($employees, $defaultValue);
     }
@@ -317,7 +336,9 @@ class AttendanceRegisterController extends Controller
         {
             $employeesRegister = new EmployeesRegister();
             $employeesRegister->id = $employee->id;
-            $employeesRegister->employeeName = $employee->name . ' ' . $employee->surname;
+            $employeesRegister->employeeNo = $employee->employee_no;
+            $employeesRegister->surname = $employee->surname;
+            $employeesRegister->name = $employee->name;
             $employeeType = EmployeeType::find($employee->employeeType_id);
             $employeesRegister->employeeType = $employeeType->employee_type;
             array_push($employeesRegisterArray, $employeesRegister);
@@ -413,7 +434,9 @@ class AttendanceRegisterController extends Controller
         {
             $employeeRegisterArray = new Employee();
             $employeeRegisterArray->id = $employee->id;
-            $employeeRegisterArray->employeeName = $employee->name . ' ' . $employee->surname;
+            $employeeRegisterArray->employeeNo = $employee->employee_no;
+            $employeeRegisterArray->surname = $employee->surname;
+            $employeeRegisterArray->name = $employee->name;
             $employeeType = EmployeeType::find($employee->employeeType_id);
             $employeeRegisterArray->employeeType = $employeeType->employee_type;
             array_push($employeesRegisterArray, $employeeRegisterArray);
@@ -472,6 +495,9 @@ class AttendanceRegisterController extends Controller
 class EmployeesRegister
 {
     public $id;
-    public $employeeName;
+    public $employeeNo;
+    public $surname;
+    public $name;
     public $employeeType;
 }
+
