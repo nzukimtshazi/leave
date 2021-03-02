@@ -23,16 +23,8 @@
                             {!! Form::text('name', $team->name, array('class' => 'form-control', 'required')) !!}
                         </div>
                         <div class="form-group">
-                            {!! Form::Label('team_id', 'Company Name') !!}
-                            <select class="form-control input-sm" name="team_id">
-                                @foreach($companies as $company)
-                                    @if($company['id'] == $tid)
-                                        <option value="{{$company['id']}}" selected="{{$tid}}">{{$company['name']}}</option>
-                                    @else
-                                        <option value="{{$company->id}}">{{$company->name}}</option>
-                                    @endif
-                                @endforeach
-                            </select>
+                            {!! Form::Label('company_id', 'Company Name') !!}
+                            {!! Form::text('company_id', $company->name, array('class' => 'form-control', 'required')) !!}
                         </div>
                     </div>
 

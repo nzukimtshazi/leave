@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Employee\Employee;
 use App\Models\LeaveCalculation\LeaveCalculation;
 use App\Models\LeaveType\LeaveType;
+use App\Models\Role\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Session;
@@ -88,13 +88,13 @@ class ReportController extends Controller
     }
     public function annualLeave()
     {
-        if(Auth::user()->user_role == 'Management') {
-            $employees = Employee::all();
-        } else {
-            $employee = Employee::where('name', '=', Auth::user()->name)
-                ->where('surname', '=', Auth::user()->surname)->first();
+        $employee = Employee::where('name', '=', Auth::user()->name)
+            ->where('surname', '=', Auth::user()->surname)->first();
+        if ($employee)
             $employees = Employee::where('company_id', '=', $employee->company_id)->get();
-        }
+        else
+            $employees = Employee::all();
+
         $annualLeaveBalances = array();
         foreach ($employees as $employee) {
             $annualLeaveBalance = new AnnualLeaveBalance();
@@ -116,13 +116,13 @@ class ReportController extends Controller
 
     public function sickLeave()
     {
-        if(Auth::user()->user_role == 'Management') {
-            $employees = Employee::all();
-        } else {
-            $employee = Employee::where('name', '=', Auth::user()->name)
-                ->where('surname', '=', Auth::user()->surname)->first();
+        $employee = Employee::where('name', '=', Auth::user()->name)
+            ->where('surname', '=', Auth::user()->surname)->first();
+        if ($employee)
             $employees = Employee::where('company_id', '=', $employee->company_id)->get();
-        }
+        else
+            $employees = Employee::all();
+
         $annualLeaveBalances = array();
         foreach ($employees as $employee) {
             $annualLeaveBalance = new AnnualLeaveBalance();

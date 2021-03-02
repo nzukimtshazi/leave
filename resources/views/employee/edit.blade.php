@@ -45,7 +45,7 @@
                         <div class="col-sm-4 col-md-4">
                             <div class="form-group">
                                 {!! Form::label('dob', 'Date of birth') !!}
-                                {!! Form::text('dob', $employee->dob, array('class' => 'form-control datepicker', 'id' => 'dob')) !!}
+                                {!! Form::date('dob', $employee->dob, array('class' => 'form-control', 'id' => 'dob')) !!}
                             </div>
                         </div>
 
@@ -94,7 +94,7 @@
                         <div class="col-sm-4 col-md-4">
                             <div class="form-group">
                                 {!! Form::label('start_date', 'Start Date') !!}
-                                {!! Form::text('start_date', $employee->start_date, array('class' => 'form-control datepicker', 'id' => 'startDate')) !!}
+                                {!! Form::date('start_date', $employee->start_date, array('class' => 'form-control', 'id' => 'startDate')) !!}
                             </div>
                         </div>
 
@@ -110,8 +110,8 @@
                                 {!! Form::Label('employeeType_id', 'Employee Type') !!}
                                 <select class="form-control input-sm" required name="employeeType_id" id="employeeType_id">
                                     @foreach($employeeTypes as $type)
-                                        @if($type['id'] == $type['employeeType_id'])
-                                            <option value="{{$type['employeeType_id']}}" selected="{{$type['employeeType_id']}}">{{$type['employee_type']}}</option>
+                                        @if($type['id'] == $employee['employeeType_id'])
+                                            <option value="{{$employee['employeeType_id']}}" selected="{{$employee['employeeType_id']}}">{{$type['employee_type']}}</option>
                                         @else
                                             <option value="{{$type->id}}">{{$type->employee_type}}</option>
                                         @endif
@@ -122,7 +122,7 @@
                     </div>
 
                     <div class="row">
-                        @if(Auth::user()->user_role == 'Management')
+                        @if(Auth::user()->countryCRUD == 'Y')
                         <div class="col-sm-3 col-md-3">
                             <div class="form-group">
                                 {!! Form::Label('country_id', 'Country Name') !!}
@@ -224,7 +224,155 @@
                             </div>
                         @endif
                     </div>
-
+                    <div class="row">
+                        <div class="col-sm-4 col-md-4">
+                            <div class="form-group">
+                                {!! Form::label('work_daysPerWeek', 'No of working days per week:') !!}
+                                {!! Form::text('work_daysPerWeek', $work_daysPerWeek, array('class' => 'form-control', 'required')) !!}
+                            </div>
+                        </div>
+                    </div><br>
+                    <div class="row">
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <strong><p>Employee Leave Types: <input type="checkbox" id="selectAll"></p></strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <label>
+                                    @if ($annual === 'on')
+                                        <input type="checkbox" name="annual" checked="">
+                                    @else
+                                        <input type="checkbox" name="annual" {{ old('annual') ? 'checked' : '' }} >
+                                    @endif
+                                    Annual Leave
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <label>
+                                    @if ($sick === 'on')
+                                        <input type="checkbox" name="sick" checked="">
+                                    @else
+                                        <input type="checkbox" name="sick" {{ old('sick') ? 'checked' : '' }} >
+                                    @endif
+                                    Sick Leave
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <label>
+                                    @if ($study === 'on')
+                                        <input type="checkbox" name="study" checked="">
+                                    @else
+                                        <input type="checkbox" name="study" {{ old('study') ? 'checked' : '' }} >
+                                    @endif
+                                    Study Leave
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <label>
+                                    @if ($maternity === 'on')
+                                        <input type="checkbox" name="maternity" checked="">
+                                    @else
+                                        <input type="checkbox" name="maternity" {{ old('maternity') ? 'checked' : '' }} >
+                                    @endif
+                                    Maternity Leave
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <label>
+                                    @if ($unpaid === 'on')
+                                        <input type="checkbox" name="unpaid" checked="">
+                                    @else
+                                        <input type="checkbox" name="unpaid" {{ old('unpaid') ? 'checked' : '' }} >
+                                    @endif
+                                    Unpaid Leave
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <label>
+                                    @if ($paternity === 'on')
+                                        <input type="checkbox" name="paternity" checked="">
+                                    @else
+                                        <input type="checkbox" name="paternity" {{ old('paternity') ? 'checked' : '' }} >
+                                    @endif
+                                    Paternity Leave
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <label>
+                                    @if ($public === 'on')
+                                        <input type="checkbox" name="public" checked="">
+                                    @else
+                                        <input type="checkbox" name="public" {{ old('public') ? 'checked' : '' }} >
+                                    @endif
+                                    Public Holidays
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3">
+                            <div class="form-group">
+                                <label>
+                                    @if ($family === 'on')
+                                        <input type="checkbox" name="family" checked="">
+                                    @else
+                                        <input type="checkbox" name="family" {{ old('family') ? 'checked' : '' }} >
+                                    @endif
+                                    Family Responsibility Leave
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <label>
+                                    @if ($commissioning === 'on')
+                                        <input type="checkbox" name="commissioning" checked="">
+                                    @else
+                                        <input type="checkbox" name="commissioning" {{ old('commissioning') ? 'checked' : '' }} >
+                                    @endif
+                                    Commissioning Leave
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <label>
+                                    @if ($adoption === 'on')
+                                        <input type="checkbox" name="adoption" checked="">
+                                    @else
+                                        <input type="checkbox" name="adoption" {{ old('adoption') ? 'checked' : '' }} >
+                                    @endif
+                                    Adoption Leave
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-sm-2 col-md-2">
+                            <div class="form-group">
+                                <label>
+                                    @if ($covid === 'on')
+                                        <input type="checkbox" name="covid" checked="">
+                                    @else
+                                        <input type="checkbox" name="covid" {{ old('covid') ? 'checked' : '' }} >
+                                    @endif
+                                    Covid Leave
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <a href="{!!URL::route('employees')!!}" class="btn btn-info" role="button">Cancel</a>
                         {!! Form::submit('Update', array('class' => 'btn btn-primary')) !!}
@@ -235,4 +383,9 @@
             </div>
         </div>
     </div>
+    <script>
+        $('#selectAll').click(function() {
+            $(this.form.elements).filter(':checkbox').prop('checked', this.checked)
+        });
+    </script>
 @endsection

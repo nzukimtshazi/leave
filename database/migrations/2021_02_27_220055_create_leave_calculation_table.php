@@ -16,7 +16,9 @@ class CreateLeaveCalculationTable extends Migration
         if (!Schema::hasTable('leaveCalculation')) {
             Schema::create('leaveCalculation', function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->decimal('leaveDays_available', 4, 2);
+                $table->integer('work_daysPerWeek');
+                $table->decimal('leaveDays_accumulated', 4, 2);
+                $table->decimal('leaveDays_taken', 4, 2);
                 $table->unsignedBigInteger('leaveType_id');
                 $table->unsignedBigInteger('employee_id');
                 $table->timestamps();

@@ -9,11 +9,19 @@ use App\Models\Team\Team;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 
 class CompanyController extends Controller
 {
+    /**
+     * Define your validation rules in a property in
+     * the controller to reuse the rules.
+     */
+    protected $validationRules=[
+        'country_id' => 'required|numeric|digits_between:1,9999',
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -68,6 +76,10 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
+        $v = Validator::make($request->all(), $this->validationRules);
+        if ($v->fails())
+            return redirect()->back()->withErrors($v->errors())->withInput();
+
         $company = Company::where('name', '=', $request->name)->count();
         if ($company > 0)
             return redirect('company/add')->withInput()->with('danger', 'Company already exists');
@@ -116,6 +128,10 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $v = Validator::make($request->all(), $this->validationRules);
+        if ($v->fails())
+            return redirect()->back()->withErrors($v->errors())->withInput();
+
         $company = Company::find($id);
         $company_check = Company::where('name', '=', Input::get('name'))->get()->first();
 

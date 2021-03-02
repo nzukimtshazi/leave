@@ -36,4 +36,3 @@ class CreateTeamsTable extends Migration
         Schema::dropIfExists('teams');
     }
 }
-

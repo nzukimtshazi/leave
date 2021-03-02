@@ -8,7 +8,7 @@
                     <div class="elementor-widget-container">
                         <ul class="elementor-icon-list-items">
                             <li class="elementor-icon-list-item">
-							    <span class="elementor-icon-list-icon"><i aria-hidden="true" class="fas fa-leaf"></i></span>
+                                <span class="elementor-icon-list-icon"><i aria-hidden="true" class="fas fa-leaf"></i></span>
                                 <span class="elementor-icon-list-text">Calcu-Leave / Accu-Leave</span>
                             </li>
                         </ul>
@@ -20,67 +20,84 @@
 
     <div class="panel-body">
         <div class="row">
-            @if(Auth::user()->user_role == 'Management')
-                <div class="container pt-3 my-3 border col-sm-3">
-                    <h3>COUNTRIES</h3>
-                    <a href="{!!URL::route('countries') !!}">Manage Countries</a>
+
+            <div class="row">
+                @if(Auth::user()->employeeCRUD == 'Y')
+                    <div class="container pt-4 my-4 col-sm-4">
+                        <h3>EMPLOYEES</h3>
+                        <a href="{!!URL::route('employees') !!}">Manage <br> Employees</a>
+                    </div>
+                @endif
+                @if(Auth::user()->attReg == 'Y')
+                    <div class="container pt-4 my-4 col-sm-4">
+                        <h3>Attendance Register</h3>
+                        <a href="{!!URL::route('attendanceRegister.search') !!}">Attendance <br> Register</a>
+                    </div>
+                @endif
+                <div class="container pt-4 my-4 col-sm-4">
+                    <h3>CALENDAR</h3>
+                    <a href="{!!URL::route('calendar.index') !!}">Manage <br> Calendar</a>
                 </div>
-                <div class="container pt-3 col-sm-3">
-                    <h3>COMPANIES</h3>
-                    <a href="{!!URL::route('companies') !!}">Manage Companies</a>
+            </div><br><br>
+
+            <div class="row">
+                @if(Auth::user()->settings == 'Y')
+                    <div class="container pt-4 my-4 col-sm-4">
+                        <h3>SETTINGS</h3>
+                        <div class="settings">
+                            <button class="settbtn">Settings</button>
+                            <div class="settings-content">
+                                @if(Auth::user()->userCRUD == 'Y')
+                                    <a href="{!! URL::route('users') !!}">Users</a>
+                                @endif
+                                @if(Auth::user()->countryCRUD == 'Y')
+                                    <a href="{!! URL::route('countries') !!}">Countries</a>
+                                @endif
+                                @if(Auth::user()->companyCRUD == 'Y')
+                                    <a href="{!! URL::route('companies') !!}">Companies</a>
+                                @endif
+                                @if(Auth::user()->departmentCRUD == 'Y')
+                                    <a href="{!! URL::route('departments') !!}">Departments</a>
+                                @endif
+                                @if(Auth::user()->teamCRUD == 'Y')
+                                    <a href="{!! URL::route('teams') !!}">Teams</a>
+                                @endif
+                                @if(Auth::user()->employeeTypeCRUD == 'Y')
+                                    <a href="{!! URL::route('employeeTypes') !!}">Employee Types</a>
+                                @endif
+                                @if(Auth::user()->leaveTypeCRUD == 'Y')
+                                    <a href="{!! URL::route('leaveTypes') !!}">Leave Types</a>
+                                @endif
+                            </div>
+                        </div>
+                        <p>Add Country / Company / User </p>
+                    </div>
+                @endif
+                @if(Auth::user()->reportView == 'Y')
+                    <div class="container pt-4 my-4 col-sm-4">
+                        <h3>REPORTS</h3>
+                        <div class="settings">
+                            <button class="settbtn">View <br> Reports</button>
+                            <div class="settings-content">
+                                <a href="{!! URL::route('reports.annualLeave') !!}">Annual Leave</a>
+                                <a href="{!! URL::route('reports.sickLeave') !!}">Sick Leave</a>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                @if(Auth::user()->leaveCRUD == 'Y')
+                    <div class="container pt-4 my-4 col-sm-4">
+                        <h3>LEAVE</h3>
+                        <a href="{!!URL::route('leave.add') !!}">Leave <br> Application</a>
+                    </div>
+                @endif
+                <div class="container pt-4 my-4 col-sm-4">
+                    <h3>SUPPORT</h3>
+                    <p> Contact <br> Us <br> Nr 021 021 0211</p>
                 </div>
-                <div class="container pt-3 my-3 border col-sm-3">
-                    <h3>DEPARTMENTS</h3>
-                    <a href="{!!URL::route('departments') !!}">Manage Departments</a>
-                </div>
-                <div class="container pt-3 col-sm-3">
-                    <h3>TEAMS</h3>
-                    <a href="{!!URL::route('teams') !!}">Manage Teams</a>
-                </div>
-                <div class="containe pt-3 col-sm-3">
-                    <h3>EMPLOYEES</h3>
-                    <a href="{!!URL::route('employees') !!}">Manage Employees</a>
-                </div>
-            @else
-                <div class="container pt-3 my-3 border col-sm-3">
-                    <h3>DEPARTMENTS</h3>
-                    <a href="{!!URL::route('departments') !!}">Manage Departments</a>
-                </div>
-                <div class="container pt-3 col-sm-3">
-                    <h3>TEAMS</h3>
-                    <a href="{!!URL::route('teams') !!}">Manage Teams</a>
-                </div>
-                <div class="containe pt-3 col-sm-3">
-                    <h3>EMPLOYEES</h3>
-                    <a href="{!!URL::route('employees') !!}">Manage Employees</a>
-                </div>
-                <div class="container pt-3 col-sm-3">
-                    <h3>EMPLOYEE TYPES</h3>
-                    <a href="{!!URL::route('employeeTypes') !!}">Manage Employee Types</a>
-                </div>
-                <div class="containe pt-3 col-sm-3">
-                    <h3>LEAVE TYPES</h3>
-                    <a href="{!!URL::route('leaveTypes') !!}">Manage Leave Types</a>
-                </div>
-            @endif
+            </div>
         </div>
     </div>
-
-    <script>
-        $(function () {
-
-            $('.wrapper1').on('scroll', function (e) {
-                $('.panel-body').scrollLeft($('.wrapper1').scrollLeft());
-            });
-            $('.panel-body').on('scroll', function (e) {
-                $('.wrapper1').scrollLeft($('.panel-body').scrollLeft());
-            });
-        });
-        $( document ).ready(function() {
-            $('.div1').width($('table').width());
-            $('.div2').width($('table').width());
-        });
-    </script>
 @endsection
 
 

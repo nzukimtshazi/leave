@@ -3,6 +3,7 @@
 @extends('layout/layout')
 
 @section('content')
+
     <div class="panel panel-default">
         <div class="col-xs-6">
             <h5>Attendance Register Search</h5>
@@ -45,7 +46,7 @@
                     <div class="col-sm-3 col-md-3">
                         <div class="form-group">
                             {!! Form::Label('start_date', 'Date Select') !!}
-                            <input id="start_date" style = "width:100px !important cursor:hand !important" name="start_date" class='form-control input-sm datepicker' type="text" />
+                            <input id="start_date" style = "width:100px !important cursor:hand !important" name="start_date" class='form-control' type="date" />
                         </div>
                     </div>
                 </div>
@@ -55,12 +56,6 @@
             </div>
         </div>
     </div>
-
-    <div class="wrapper1">
-        <div class="div1"></div>
-    </div>
-
-
     <script>
         jQuery('.selectpicker').selectpicker({
             noneSelectedText:'Select All'
