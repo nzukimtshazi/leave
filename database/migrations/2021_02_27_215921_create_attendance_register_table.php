@@ -16,25 +16,14 @@ class CreateAttendanceRegisterTable extends Migration
         if (!Schema::hasTable('attendanceRegister')) {
             Schema::create('attendanceRegister', function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->date('day1');
-                $table->string('day1Register');
-                $table->date('day2');
-                $table->string('day2Register');
-                $table->date('day3');
-                $table->string('day3Register');
-                $table->date('day4');
-                $table->string('day4Register');
-                $table->date('day5');
-                $table->string('day5Register');
-                $table->date('day6');
-                $table->string('day6Register');
-                $table->date('day7');
-                $table->string('day7Register');
-                $table->date('last_captureDate');
+                $table->date('dayOfWeek');
+                $table->string('register');
+                $table->unsignedBigInteger('employeeType_id');
                 $table->unsignedBigInteger('employee_id');
                 $table->timestamps();
             });
             Schema::table('attendanceRegister', function ($table) {
+                $table->foreign('employeeType_id')->references('id')->on('employeeTypes');
                 $table->foreign('employee_id')->references('id')->on('employees');
             });
         }

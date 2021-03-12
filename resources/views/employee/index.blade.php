@@ -92,6 +92,7 @@
                                             <div>
                                                 {!! Form::model($employee, ['method' => 'GET', 'route' => ['employee.edit', $employee->id]]) !!}
                                                 <button type="submit" class="btn btn-warning"><i class="fa fa-trash"></i></i> Edit </button>
+                                                <a href="{!!URL::route('leave.add')!!}" class="btn btn-warning">Leave</a>
                                                 <a href="{!!URL::route('employee.destroy', ['id' => $employee->id])!!}" class="btn btn-danger"
                                                    onclick="return confirm('Are you sure about terminating the employee?')">Terminate</a>
                                                 {!! Form::close() !!}

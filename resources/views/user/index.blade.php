@@ -49,7 +49,11 @@
 
                                     <!-- User Role -->
                                     <td class="table-text">
-                                        <div>{{ $user->user_role }}</div>
+                                        @foreach($roles as $role)
+                                            @if($role['id'] == $user->role_id)
+                                                <option value="{{$role->id}}">{{$role->description}}</option>
+                                            @endif
+                                        @endforeach
                                     </td>
 
                                     <!-- User Email Address -->

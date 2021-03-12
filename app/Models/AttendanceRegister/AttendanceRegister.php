@@ -25,8 +25,7 @@ class AttendanceRegister extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['day1', 'day1Register', 'day2', 'day2Register', 'day3', 'day3Register', 'day4', 'day4Register',
-        'day5', 'day5Register', 'day6', 'day6Register', 'day7', 'day7Register', 'last_captureDate', 'employee_id'];
+    protected $fillable = ['dayOfWeek', 'register', 'employeeType_id', 'employee_id'];
 
     /**
      * The attributes excluded from the model's JSON form.

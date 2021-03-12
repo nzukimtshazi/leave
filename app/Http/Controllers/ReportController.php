@@ -106,9 +106,9 @@ class ReportController extends Controller
             $leaveType = LeaveType::where('type', 'like', '%' . 'nnua' . '%')->first();
             $leaveCalculations = LeaveCalculation::where('leaveType_id', '=', $leaveType->id)
                 ->where('employee_id', '=', $employee->id)->first();
-            $annualLeaveBalance->accumulatedLeave = $leaveCalculations->leaveDays_available;
+            $annualLeaveBalance->accumulatedLeave = $leaveCalculations->leaveDays_accumulated;
             $annualLeaveBalance->daysTaken = $leaveCalculations->leaveDays_taken;
-            $annualLeaveBalance->daysRemaining = $leaveCalculations->leaveDays_available - $leaveCalculations->leaveDays_taken;
+            $annualLeaveBalance->daysRemaining = $leaveCalculations->leaveDays_accumulated - $leaveCalculations->leaveDays_taken;
             array_push($annualLeaveBalances, $annualLeaveBalance);
         }
         return view('reports.annualLeave', compact('annualLeaveBalances'));
@@ -134,9 +134,9 @@ class ReportController extends Controller
             $leaveType = LeaveType::where('type', 'like', '%' . 'ick' . '%')->first();
             $leaveCalculations = LeaveCalculation::where('leaveType_id', '=', $leaveType->id)
                 ->where('employee_id', '=', $employee->id)->first();
-            $annualLeaveBalance->accumulatedLeave = $leaveCalculations->leaveDays_available;
+            $annualLeaveBalance->accumulatedLeave = $leaveCalculations->leaveDays_accumulated;
             $annualLeaveBalance->daysTaken = $leaveCalculations->leaveDays_taken;
-            $annualLeaveBalance->daysRemaining = $leaveCalculations->leaveDays_available - $leaveCalculations->leaveDays_taken;
+            $annualLeaveBalance->daysRemaining = $leaveCalculations->leaveDays_accumulated - $leaveCalculations->leaveDays_taken;
             array_push($annualLeaveBalances, $annualLeaveBalance);
         }
         return view('reports.sickLeave', compact('annualLeaveBalances'));

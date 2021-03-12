@@ -47,14 +47,14 @@
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 {!! Form::label('start_date', 'Start Date') !!}
-                                <input type="text" name="start_date" value="{{ old('start_date') }}" required id="start_date" class="form-control datepicker">
+                                <input type="date" name="start_date" value="{{ old('start_date') }}" required id="start_date" class="form-control">
                             </div>
                         </div>
 
                         <div class="col-sm-6 col-md-6">
                             <div class="form-group">
                                 {!! Form::label('end_date', 'End Date') !!}
-                                <input type="text" name="end_date" value="{{ old('end_date') }}" required id="end_date" class="form-control datepicker">
+                                <input type="date" name="end_date" value="{{ old('end_date') }}" required id="end_date" class="form-control">
                             </div>
                         </div>
 
