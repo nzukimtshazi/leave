@@ -24,7 +24,9 @@ class LeaveController extends Controller
      */
     public function index(Request $request)
     {
-        //
+        $leaveTypes = LeaveType::all();
+        $employeeTypes = EmployeeType::all();
+        return view('leave.searchPendingLeave', compact('leaveTypes', 'employeeTypes'));
     }
     /**
      * Show the form for creating a new resource.
@@ -47,24 +49,6 @@ class LeaveController extends Controller
     {
         $employee = Employee::where('name', '=', $request->input('nameAuto'))
             ->where('surname', '=', $request->input('surname'))->first();
-
-        $date1 = Carbon::createFromFormat('Y-m-d', $request->input('start_date'));
-        $date2 = Carbon::createFromFormat('Y-m-d', $request->input('end_date'));
-        $interval = $date1->diffInDays($date2);
-        $days = ++$interval;
-
-        $leaveType = LeaveType::where('id', '=', $request->input('leaveType_id'))->first();
-        $leaveCalculation = LeaveCalculation::where('leaveType_id', '=', $leaveType->id)
-            ->where('employee_id', '=', $employee->id)->first();
-
-        if ($leaveCalculation) {
-            if ($days > $leaveCalculation->leaveDays_available)
-                return Redirect::route('leave.add')->with('warning', 'Available leave days are less than applied days!');
-
-            $leaveCalculation->leaveDays_available = $leaveCalculation->leaveDays_available - $days;
-            $leaveCalculation->leaveDays_taken = $leaveCalculation->leaveDays_taken + $days;
-            $leaveCalculation->update();
-        }
 
         $input = Input::all();
         $leave = new Leave($input);
@@ -95,7 +79,8 @@ class LeaveController extends Controller
      */
     public function edit($id)
     {
-        //
+        $employee = Employee::find($id);
+        return view('leave.edit', compact('employee'));
     }
 
     /**
@@ -119,5 +104,36 @@ class LeaveController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function approveLeave($id)
+    {
+        $employee = Employee::find($id);
+
+        $date1 = Carbon::createFromFormat('Y-m-d', $request->input('start_date'));
+        $date2 = Carbon::createFromFormat('Y-m-d', $request->input('end_date'));
+        $interval = $date1->diffInDays($date2);
+        $days = ++$interval;
+
+        $leaveType = LeaveType::where('id', '=', $request->input('leaveType_id'))->first();
+        $leaveCalculation = LeaveCalculation::where('leaveType_id', '=', $leaveType->id)
+            ->where('employee_id', '=', $employee->id)->first();
+
+        if ($leaveCalculation) {
+            if ($days > $leaveCalculation->leaveDays_available)
+                return Redirect::route('leave.add')->with('warning', 'Available leave days are less than applied days!');
+
+            $leaveCalculation->leaveDays_available = $leaveCalculation->leaveDays_available - $days;
+            $leaveCalculation->leaveDays_taken = $leaveCalculation->leaveDays_taken + $days;
+            $leaveCalculation->update();
+        }
+
+        $input = Input::all();
+        $leave = new Leave($input);
+        $leave->employee_id = $employee->id;
+
+        if ($leave->save())
+            return Redirect::route('reports.annualLeave')->with('success', 'Successfully captured leave for employee!');
+        else
+            return Redirect::route('leave.add')->withInput()->withErrors($leave->errors());
     }
 }

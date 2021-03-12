@@ -35,10 +35,10 @@
                     <div class="col-sm-3 col-md-3">
                         <div class="form-group">
                             {!! Form::Label('employeeType_id', 'Employee Types') !!}
-                            <select class="form-control" id="employeeType_id" name="employeeType_id" required>
-                                <option disabled selected hidden>Select Employee Type</option>
+                            <select class="form-control" required id="employeeType_id" name="employeeType_id">
+                                <option value="">Select Employee Type</option>
                                 @foreach($employeeTypes as $type)
-                                    <option value="{{$type->id}}">{{$type->employee_type}}</option>
+                                    <option value="{{$type->id}}" @if(old('employeeType_id') == $type->id) selected="selected"@endif>{{$type->employee_type}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -46,12 +46,11 @@
                     <div class="col-sm-3 col-md-3">
                         <div class="form-group">
                             {!! Form::Label('start_date', 'Date Select') !!}
-                            <input id="start_date" style = "width:100px !important cursor:hand !important" name="start_date" class='form-control' type="date" />
+                            <input type="date" name="start_date" style = "width:100px !important cursor:hand !important" value="{{ old('start_date') }}" required id="start_date" class='form-control' />
                         </div>
                     </div>
                 </div>
                 {!! Form::submit('Search', array('class' => 'btn btn-primary')) !!}
-
                 {!! Form::close() !!}
             </div>
         </div>

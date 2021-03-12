@@ -11,18 +11,20 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav nav-pills nav-stacked">
-
                     <span class="label label-primary col-xs-12 col-sm-12 col-md-12" style="cursor: pointer;" data-toggle="collapse" data-target="#mainMenu">Main</span>
                     <div id="mainMenu" class="collapse in">
                         <li><a href="{!!URL::route('dashboard.view')!!}">Dashboard</a></li>
-                        @if(Auth::user()->employeeCRUD == 'Y')
+                        @if(Auth::user()->addEmployee == 'Y')
                             <li><a href="{!!URL::route('employees')!!}">Employees</a></li>
                         @endif
                         @if(Auth::user()->attReg == 'Y')
                             <li><a href="{!!URL::route('attendanceRegister.search')!!}">Attendance Register</a></li>
                         @endif
-                        @if(Auth::user()->leaveCRUD == 'Y')
-                            <li><a href="{!!URL::route('leave.add')!!}">Leave Applications</a></li>
+                        @if(Auth::user()->leaveCapture == 'Y')
+                            <li><a href="{!!URL::route('leave.add')!!}">Leave Application</a></li>
+                        @endif
+                        @if(Auth::user()->leaveApprove == 'Y')
+                            <li><a href="{!!URL::route('leaves')!!}">Approve Leave</a></li>
                         @endif
                         <li><a href="{!!URL::route('calendar.index')!!}">Calendar</a></li>
 
@@ -30,25 +32,28 @@
                             <div class="settings">
                                 <button class="settbtn">Settings</button>
                                 <div class="settings-content">
-                                    @if(Auth::user()->userCRUD == 'Y')
+                                    @if(Auth::user()->createRole == 'Y')
+                                        <li><a href="{!! URL::route('roles') !!}">User Roles</a></li>
+                                    @endif
+                                    @if(Auth::user()->addUser == 'Y')
                                         <li><a href="{!! URL::route('users') !!}">Users</a></li>
                                     @endif
-                                    @if(Auth::user()->countryCRUD == 'Y')
+                                    @if(Auth::user()->addCountry == 'Y')
                                         <li><a href="{!! URL::route('countries') !!}">Countries</a></li>
                                     @endif
-                                    @if(Auth::user()->companyCRUD == 'Y')
+                                    @if(Auth::user()->addCompany == 'Y')
                                         <li><a href="{!! URL::route('companies') !!}">Companies</a></li>
                                     @endif
-                                    @if(Auth::user()->departmentCRUD == 'Y')
+                                    @if(Auth::user()->addDept == 'Y')
                                         <li><a href="{!!URL::route('departments')!!}">Departments</a></li>
                                     @endif
-                                    @if(Auth::user()->teamCRUD == 'Y')
+                                    @if(Auth::user()->addTeam == 'Y')
                                         <li><a href="{!!URL::route('teams')!!}">Teams</a></li>
                                     @endif
-                                    @if(Auth::user()->employeeTypeCRUD == 'Y')
+                                    @if(Auth::user()->addEmployeeType == 'Y')
                                         <li><a href="{!!URL::route('employeeTypes')!!}">Employee Types</a></li>
                                     @endif
-                                    @if(Auth::user()->leaveTypeCRUD == 'Y')
+                                    @if(Auth::user()->addLeaveType == 'Y')
                                         <li><a href="{!!URL::route('leaveTypes')!!}">Leave Types</a></li>
                                     @endif
                                 </div>

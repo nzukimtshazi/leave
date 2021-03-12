@@ -30,7 +30,8 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('user.index', compact('users'));
+        $roles = Role::all();
+        return view('user.index', compact('users', 'roles'));
     }
     /**
      * Show the form for creating a new resource.
@@ -63,83 +64,79 @@ class UserController extends Controller
         if ($exists) {
             return Redirect::route('user.create')->withInput()->with('danger', 'User with email "' . $user->email . '" already exists!');
         }
-        if (Input::get('country') == null && Input::get('company') == null && Input::get('department') == null &&
-            Input::get('team') == null && Input::get('employeeType') == null && Input::get('leaveType') == null &&
-            Input::get('employee') == null && Input::get('attReg') == null && Input::get('leave') == null &&
-            Input::get('reports') == null && Input::get('user_role') == null && Input::get('crud_user') == null)
-            return Redirect::route('user.add')->withInput()->with('warning', 'At least one user function must be selected!');
-
-        $role = Role::find(Input::get('role_id'));
-        if (Input::get('country') == 'on') {
-            $user->countryCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD Country');
-        }
-        if (Input::get('company') == 'on') {
-            $user->companyCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD Company');
-        }
-        if (Input::get('department') == 'on') {
-            $user->departmentCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD Department');
-        }
-        if (Input::get('team') == 'on') {
-            $user->teamCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD Team');
-        }
-        if (Input::get('employeeType') == 'on') {
-            $user->employeeTypeCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD Employee Type');
-        }
-        if (Input::get('leaveType') == 'on') {
-            $user->leaveTypeCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD Leave Type');
-        }
-        if (Input::get('employee') == 'on') {
-            $user->employeeCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD Employee');
-        }
-        if (Input::get('attReg') == 'on') {
-            $user->attReg = 'Y';
-            $this->addFunctions($role->id, 'Add Attendance Register');
-        }
-        if (Input::get('leave') == 'on') {
-            $user->leaveCRUD = 'Y';
-            $this->addFunctions($role->id, 'Capture Leave');
-        }
-        if (Input::get('settings') == 'on') {
-            $user->settings = 'Y';
-            $this->addFunctions($role->id, 'Settings');
-        }
-        if (Input::get('reports') == 'on') {
-            $user->reportView = 'Y';
-            $this->addFunctions($role->id, 'View Reports');
-        }
-        if (Input::get('user_role') == 'on') {
-            $user->roleCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD User role');
-        }
-        if (Input::get('crud_user') == 'on') {
-            $user->userCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD User');
+        $functions = Functions::where('role_id', '=', Input::get('role_id'))->get();
+        foreach ($functions as $function)
+        {
+            if ($function->description == 'Create User Role')
+                $user->createRole = 'Y';
+            if ($function->description == 'Update User Role')
+                $user->updateRole = 'Y';
+            if ($function->description == 'Delete User Role')
+                $user->deleteRole = 'Y';
+            if ($function->description == 'Add User')
+                $user->addUser = 'Y';
+            if ($function->description == 'Update User')
+                $user->updateUser = 'Y';
+            if ($function->description == 'Delete User')
+                $user->deleteUser = 'Y';
+            if ($function->description == 'Add Country')
+                $user->addCountry = 'Y';
+            if ($function->description == 'Add Company')
+                $user->addCompany = 'Y';
+            if ($function->description == 'Add Department')
+                $user->addDept = 'Y';
+            if ($function->description == 'Add Team')
+                $user->addTeam = 'Y';
+            if ($function->description == 'Add Employee Type')
+                $user->addEmployeeType = 'Y';
+            if ($function->description == 'Add Leave Type')
+                $user->addLeaveType = 'Y';
+            if ($function->description == 'Update Country')
+                $user->updateCountry = 'Y';
+            if ($function->description == 'Update Company')
+                $user->updateCompany = 'Y';
+            if ($function->description == 'Update Department')
+                $user->updateDept = 'Y';
+            if ($function->description == 'Update Team')
+                $user->updateTeam = 'Y';
+            if ($function->description == 'Update Employee Type')
+                $user->updateEmployeeType = 'Y';
+            if ($function->description == 'Update Leave Type')
+                $user->updateLeaveType = 'Y';
+            if ($function->description == 'Delete Country')
+                $user->deleteCountry = 'Y';
+            if ($function->description == 'Delete Company')
+                $user->deleteCompany = 'Y';
+            if ($function->description == 'Delete Department')
+                $user->deleteDept = 'Y';
+            if ($function->description == 'Delete Team')
+                $user->deleteTeam = 'Y';
+            if ($function->description == 'Delete Employee Type')
+                $user->deleteEmployeeType = 'Y';
+            if ($function->description == 'Delete Leave Type')
+                $user->deleteLeaveType = 'Y';
+            if ($function->description == 'Add Employee')
+                $user->addEmployee = 'Y';
+            if ($function->description == 'Update Employee')
+                $user->updateEmployee = 'Y';
+            if ($function->description == 'Delete Employee')
+                $user->deleteEmployee = 'Y';
+            if ($function->description == 'Attendance Register')
+                $user->attReg = 'Y';
+            if ($function->description == 'Capture Leave')
+                $user->leaveCapture = 'Y';
+            if ($function->description == 'Approve Leave')
+                $user->leaveApprove = 'Y';
+            if ($function->description == 'Settings')
+                $user->settings = 'Y';
+            if ($function->description == 'View Reports')
+                $user->reportView = 'Y';
         }
         if ($user->save()) {
             return Redirect::route('users')->with('success', 'Successfully added user!');
         } else
             return Redirect::route('user.create')->withInput()->withErrors($user->errors());
     }
-    public function addFunctions($role_id, $description)
-    {
-        $functions = Functions::where('description', '=', $description)
-            ->where('role_id', '=', $role_id)->first();
-
-        if (!$functions) {
-            $functions = new Functions();
-            $functions->description = $description;
-            $functions->role_id = $role_id;
-            $functions->save();
-        }
-    }
-
     /**
      * Display the specified resource.
      *
@@ -162,61 +159,7 @@ class UserController extends Controller
         $user = User::find($id);
         $roles = Role::all();
 
-        if ($user->countryCRUD == 'Y')
-            $country = 'on';
-        else
-            $country = null;
-        if ($user->companyCRUD == 'Y')
-            $company = 'on';
-        else
-            $company = null;
-        if ($user->departmentCRUD == 'Y')
-            $department = 'on';
-        else
-            $department = null;
-        if ($user->teamCRUD == 'Y')
-            $team = 'on';
-        else
-            $team = null;
-        if ($user->employeeTypeCRUD == 'Y')
-            $employeeType = 'on';
-        else
-            $employeeType = null;
-        if ($user->leaveTypeCRUD == 'Y')
-            $leaveType = 'on';
-        else
-            $leaveType = null;
-        if ($user->employeeCRUD == 'Y')
-            $employee = 'on';
-        else
-            $employee = null;
-        if ($user->attReg == 'Y')
-            $attReg = 'on';
-        else
-            $attReg = null;
-        if ($user->leaveCRUD == 'Y')
-            $leave = 'on';
-        else
-            $leave = null;
-        if ($user->settings = 'Y')
-            $settings = 'on';
-        else
-            $settings = null;
-        if ($user->reportView == 'Y')
-            $reports = 'on';
-        else
-            $reports = null;
-        if ($user->roleCRUD == 'Y')
-            $user_role = 'on';
-        else
-            $user_role = null;
-        if ($user->userCRUD == 'Y')
-            $crud_user = 'on';
-        else
-            $crud_user = null;
-
-        return view('user.edit', compact('user', 'roles', 'country', 'company', 'department', 'team', 'employeeType',
-            'leaveType', 'employee', 'attReg', 'leave', 'settings', 'reports', 'user_role', 'crud_user'));
+        return view('user.edit', compact('user', 'roles'));
     }
 
     /**
@@ -232,16 +175,24 @@ class UserController extends Controller
         if ($v->fails())
             return redirect()->back()->withErrors($v->errors())->withInput();
 
-        if (Input::get('country') == null && Input::get('company') == null && Input::get('department') == null &&
-            Input::get('team') == null && Input::get('employeeType') == null && Input::get('leaveType') == null &&
-            Input::get('employee') == null && Input::get('attReg') == null && Input::get('leave') == null &&
-            Input::get('reports') == null && Input::get('user_role') == null && Input::get('crud_user') == null)
-            return Redirect::route('user.edit', [$id])->withInput()->with('warning', 'At least one user function must be selected!');
-
         $user = User::find($id);
         $user->name = Input::get('name');
         $user->surname = Input::get('surname');
         $user->email = Input::get('email');
+        $user->createRole = 'N'; $user->updateRole = 'N'; $user->deleteRole = 'N';
+        $user->addUser = 'N'; $user->updateUser = 'N'; $user->deleteUser = 'N';
+        $user->addCountry = 'N'; $user->updateCountry = 'N'; $user->deleteCountry = 'N';
+        $user->addCompany = 'N'; $user->updateCompany = 'N'; $user->deleteCompany = 'N';
+        $user->addDept = 'N'; $user->updateDept = 'N'; $user->deleteDept = 'N';
+        $user->addTeam = 'N'; $user->updateTeam = 'N'; $user->deleteTeam = 'N';
+        $user->addEmployeeType = 'N'; $user->updateEmployeeType = 'N'; $user->deleteEmployeeType = 'N';
+        $user->addLeaveType = 'N'; $user->updateLeaveType = 'N'; $user->deleteLeaveType = 'N';
+        $user->addEmployee = 'N'; $user->updateEmployee = 'N'; $user->deleteEmployee = 'N';
+        $user->attReg = 'N';
+        $user->leaveCapture = 'N';
+        $user->leaveApprove = 'N';
+        $user->settings = 'N';
+        $user->reportView = 'N';
         $user->role_id = Input::get('role_id');
 
         if ((Input::get('password')) != $user->password)
@@ -251,91 +202,78 @@ class UserController extends Controller
         if ($exists  && $exists->id != $id) {
             return Redirect::route('user.edit', [$id])->withInput()->with('danger', 'User with email "' . $user->email . '" already exists!');
         }
-        $role = Role::find(Input::get('role_id'));
-        if (Input::get('country') == 'on') {
-            $user->countryCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD Country');
-        } else
-            $user->countryCRUD = 'N';
-
-        if (Input::get('company') == 'on') {
-            $user->companyCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD Company');
-        } else
-            $user->companyCRUD = 'N';
-
-        if (Input::get('department') == 'on') {
-            $user->departmentCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD Department');
-        } else
-            $user->departmentCRUD = 'N';
-
-        if (Input::get('team') == 'on') {
-            $user->teamCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD Team');
-        } else
-            $user->teamCRUD = 'N';
-
-        if (Input::get('employeeType') == 'on') {
-            $user->employeeTypeCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD Employee Type');
-        } else
-            $user->employeeTypeCRUD = 'N';
-
-        if (Input::get('leaveType') == 'on') {
-            $user->leaveTypeCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD Leave Type');
-        } else
-            $user->leaveTypeCRUD = 'N';
-
-        if (Input::get('employee') == 'on') {
-            $user->employeeCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD Employee');
-        } else
-            $user->employeeCRUD = 'N';
-
-        if (Input::get('attReg') == 'on') {
-            $user->attReg = 'Y';
-            $this->addFunctions($role->id, 'Add Attendance Register');
-        } else
-            $user->attReg = 'N';
-
-        if (Input::get('leave') == 'on') {
-            $user->leaveCRUD = 'Y';
-            $this->addFunctions($role->id, 'Capture Leave');
-        } else
-            $user->leaveCRUD = 'N';
-
-        if (Input::get('settings') == 'on') {
-            $user->settings = 'Y';
-            $this->addFunctions($role->id, 'Settings');
-        } else
-            $user->settings = 'N';
-
-        if (Input::get('reports') == 'on') {
-            $user->reportView = 'Y';
-            $this->addFunctions($role->id, 'View Reports');
-        } else
-            $user->reportView = 'N';
-
-        if (Input::get('user_role') == 'on') {
-            $user->roleCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD User role');
-        } else
-            $user->roleCRUD = 'N';
-
-        if (Input::get('crud_user') == 'on') {
-            $user->userCRUD = 'Y';
-            $this->addFunctions($role->id, 'CRUD User');
-        } else
-            $user->userCRUD = 'N';
-
+        $functions = Functions::where('role_id', '=', Input::get('role_id'))->get();
+        foreach ($functions as $function) {
+            if ($function->description == 'Create User Role')
+                $user->createRole = 'Y';
+            if ($function->description == 'Update User Role')
+                $user->updateRole = 'Y';
+            if ($function->description == 'Delete User Role')
+                $user->deleteRole = 'Y';
+            if ($function->description == 'Add User')
+                $user->addUser = 'Y';
+            if ($function->description == 'Update User')
+                $user->updateUser = 'Y';
+            if ($function->description == 'Delete User')
+                $user->deleteUser = 'Y';
+            if ($function->description == 'Add Country')
+                $user->addCountry = 'Y';
+            if ($function->description == 'Add Company')
+                $user->addCompany = 'Y';
+            if ($function->description == 'Add Department')
+                $user->addDept = 'Y';
+            if ($function->description == 'Add Team')
+                $user->addTeam = 'Y';
+            if ($function->description == 'Add Employee Type')
+                $user->addEmployeeType = 'Y';
+            if ($function->description == 'Add Leave Type')
+                $user->addLeaveType = 'Y';
+            if ($function->description == 'Update Country')
+                $user->updateCountry = 'Y';
+            if ($function->description == 'Update Company')
+                $user->updateCompany = 'Y';
+            if ($function->description == 'Update Department')
+                $user->updateDept = 'Y';
+            if ($function->description == 'Update Team')
+                $user->updateTeam = 'Y';
+            if ($function->description == 'Update Employee Type')
+                $user->updateEmployeeType = 'Y';
+            if ($function->description == 'Update Leave Type')
+                $user->updateLeaveType = 'Y';
+            if ($function->description == 'Delete Country')
+                $user->deleteCountry = 'Y';
+            if ($function->description == 'Delete Company')
+                $user->deleteCompany = 'Y';
+            if ($function->description == 'Delete Department')
+                $user->deleteDept = 'Y';
+            if ($function->description == 'Delete Team')
+                $user->deleteTeam = 'Y';
+            if ($function->description == 'Delete Employee Type')
+                $user->deleteEmployeeType = 'Y';
+            if ($function->description == 'Delete Leave Type')
+                $user->deleteLeaveType = 'Y';
+            if ($function->description == 'Add Employee')
+                $user->addEmployee = 'Y';
+            if ($function->description == 'Update Employee')
+                $user->updateEmployee = 'Y';
+            if ($function->description == 'Delete Employee')
+                $user->deleteEmployee = 'Y';
+            if ($function->description == 'Attendance Register')
+                $user->attReg = 'Y';
+            if ($function->description == 'Capture Leave')
+                $user->leaveCapture = 'Y';
+            if ($function->description == 'Approve Leave')
+                $user->leaveApprove = 'Y';
+            if ($function->description == 'Settings')
+                $user->settings = 'Y';
+            if ($function->description == 'View Reports')
+                $user->reportView = 'Y';
+        }
         if ($user->update())
             return Redirect::route('users')->with('success', 'Successfully updated user!');
         else
             return Redirect::route('user.edit', [$id])->withInput()->withErrors($user->errors());
     }
-
     /**
      * Remove the specified resource from storage.
      *

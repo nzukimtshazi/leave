@@ -25,7 +25,7 @@ class LeaveCalculation extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['annualLeaveCnt', 'sickLeaveCnt', 'familyRespLeaveCnt', 'employee_id'];
+    protected $fillable = ['work_daysPerWeek', 'leaveDays_accumulated', 'leaveDays_taken', 'leaveType_id', 'employee_id'];
 
     /**
      * The attributes excluded from the model's JSON form.

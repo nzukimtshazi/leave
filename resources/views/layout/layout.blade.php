@@ -26,6 +26,7 @@
         {!! HTML::style(URL::to('/').'/DataTables/extensions/Buttons/css/buttons.dataTables.min.css') !!}
         {!! HTML::script(URL::to('/').'/DataTables/extensions/Buttons/js/buttons.html5.js') !!}
         {!! HTML::script(URL::to('/').'/DataTables/extensions/Buttons/js/buttons.flash.js') !!}
+        {!! HTML::script(URL::to('/').'/cdn.datatables.net/fixedcolumns/3.3.2/js/dataTables.fixedColumns.min.js') !!}
 
         {!! HTML::style(URL::to('/').'/bootstrap-select/css/bootstrap-select.css') !!}
         {!! HTML::script(URL::to('/').'/bootstrap-select/js/bootstrap-select.js') !!}
