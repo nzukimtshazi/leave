@@ -24,9 +24,9 @@ class LeaveController extends Controller
      */
     public function index(Request $request)
     {
-        $leaveTypes = LeaveType::all();
-        $employeeTypes = EmployeeType::all();
-        return view('leave.searchPendingLeave', compact('leaveTypes', 'employeeTypes'));
+        $employees = Employee::all();
+        $leaves = Leave::all();
+        return view('leave.index', compact('employees', 'leaves'));
     }
     /**
      * Show the form for creating a new resource.
@@ -80,7 +80,8 @@ class LeaveController extends Controller
     public function edit($id)
     {
         $employee = Employee::find($id);
-        return view('leave.edit', compact('employee'));
+        $leave = Leave::all();
+        return view('leave.edit', compact('employee', 'leave'));
     }
 
     /**

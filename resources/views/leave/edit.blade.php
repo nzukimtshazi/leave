@@ -28,25 +28,6 @@
                         {!! Form::text('surname', Request::old('surname'), array('class' => 'form-control', 'required')) !!}
                     </div>
 
-                    <div class="form-group">
-                        {!! Form::Label('leaveType_id', 'Leave Type') !!}
-                        @foreach($leaveTypes as $leaveType)
-                            @if($leaveType['id'] == app('request')->input('leaveType'))
-                                <option value="{{$leaveType->id}}">{{$leaveType->type}}</option>
-                            @endif
-                        @endforeach
-                    </div>
-
-                    <div class="form-group">
-                        {!! Form::label('start_date', 'Start Date') !!}
-                        {!! Form::date('start_date', $leave->start_date, array('class' => 'form-control')) !!}
-                    </div>
-
-                    <div class="form-group">
-                        {!! Form::label('start_date', 'Start Date') !!}
-                        {!! Form::date('start_date', $leave->start_date, array('class' => 'form-control')) !!}
-                    </div>
-
                     <div class="col-xs-12 col-sm-12 col-md-12">
                         <a href="{!!URL::route('leaves')!!}" class="btn btn-info" role="button">Cancel</a>
                         {!! Form::submit('Update', array('class' => 'btn btn-primary')) !!}
