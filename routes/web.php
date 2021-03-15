@@ -159,6 +159,12 @@ Route::get('leave/add', ['as' => 'leave.add','uses' => 'LeaveController@add', 'm
 // store leave
 Route::post('leave/store', ['as' => 'leave.store','uses' => 'LeaveController@store']);
 
+// edit leave
+Route::get('leave/edit/{id}', ['as' => 'leave.edit','uses' => 'LeaveController@edit', 'middleware' => 'myMiddleware'])->middleware('auth');
+
+// update leave
+Route::PATCH('leave/update/{id}', ['as' => 'leave.update','uses' => 'LeaveController@update']);
+
 // approve leave
 Route::get('leave/approve/{id}', ['as' => 'leave.approve','uses' => 'LeaveController@approve', 'middleware' => 'myMiddleware'])->middleware('auth');
 
